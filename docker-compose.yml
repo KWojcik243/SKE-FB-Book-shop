@@ -4,6 +4,7 @@ services:
   java_db:
     container_name: java_db
     image: postgres:15
+    restart: always
     ports:
       - 5433:5432
     environment:
@@ -11,6 +12,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
     volumes:
-      - pgdata:/var/lib/postgresql/data
-volumes:
-  pgdata: {}
+      - ./postgres-data:/var/lib/postgresql/data
+      - ./db_init/BookShop.sql:/docker-entrypoint-initdb.d/BookShop.sql
+      - ./db_init/FillTables.sql:/docker-entrypoint-initdb.d/FillTables.sql
