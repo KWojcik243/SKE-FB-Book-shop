@@ -20,18 +20,18 @@ public class OrderDetails {
 
     @OneToOne(mappedBy = "OrdersDetails", fetch = FetchType.EAGER,
             cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
-    private List<Book> books;
+    private Book books;
 
-    @OneToMany(mappedBy = "OrdersDetails", fetch = FetchType.EAGER,
+    @ManyToOne(fetch = FetchType.EAGER,
             cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
-    private List<Order> orders;
+    private Order orders;
 
     @Column(name = "status")
-    private String status;
+    private int status;
 
     public OrderDetails() {}
 
-    public OrderDetails(String status) {
+    public OrderDetails(int status) {
         this.status = status;
     }
 }

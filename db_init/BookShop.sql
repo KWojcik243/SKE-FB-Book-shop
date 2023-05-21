@@ -5,7 +5,6 @@ CREATE TABLE "Books" (
   "age_group" int,
   "rating" float,
   "isbn" varchar,
-  "category" int,
   "author_id" int,
   "amount" int
 );

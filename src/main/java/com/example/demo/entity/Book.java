@@ -22,14 +22,17 @@ public class Book {
             cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
     private List<Author> authors;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "png_path")
+    private String pngPath;
 
     @Column(name = "age_group")
     private int ageGroup;
 
     @Column(name = "rating")
-    private double rating;
+    private float rating;
 
     @Column(name = "isbn")
     private long isbn;
@@ -39,8 +42,9 @@ public class Book {
 
     public Book() {}
 
-    public Book(String name, int ageGroup, double rating, long isbn, int amount) {
-        this.name = name;
+    public Book(String title, String pngPath, int ageGroup, float rating, long isbn, int amount) {
+        this.title = title;
+        this.pngPath = pngPath;
         this.ageGroup = ageGroup;
         this.rating = rating;
         this.isbn = isbn;
