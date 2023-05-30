@@ -26,7 +26,7 @@ public class BookController {
     }
 
     @GetMapping("/books")
-    public List<Book> getBooks(){
+    public List<Book> getBooks() {
         return bookService.getBooks();
     }
 
@@ -36,8 +36,15 @@ public class BookController {
                         @RequestParam int ageGroup,
                         @RequestParam float rating,
                         @RequestParam long isbn,
-                        @RequestParam int amount){
-        bookService.addBook(title, pngPath, ageGroup, rating, isbn, amount);
+                        @RequestParam int amount,
+                        @RequestParam List<Integer> authorIds) {
+        bookService.addBook(title, pngPath, ageGroup, rating, isbn, amount, authorIds);
 
     }
+
+    @GetMapping("/booksByAuthor")
+    public List<Book> getBooksByAuthor(@RequestParam int authorId) {
+        return bookService.getBooksByAuthorId(authorId);
+    }
+
 }
