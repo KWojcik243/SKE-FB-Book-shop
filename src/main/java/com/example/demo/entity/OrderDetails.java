@@ -18,13 +18,13 @@ public class OrderDetails {
     @Column(name = "id")
     private int id;
 
-    @OneToOne(mappedBy = "OrdersDetails", fetch = FetchType.EAGER,
-            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
-    private Book books;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "book_id")
+    private Book book;
 
-    @ManyToOne(fetch = FetchType.EAGER,
-            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
-    private Order orders;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "order_id")
+    private Order order;
 
     @Column(name = "status")
     private int status;

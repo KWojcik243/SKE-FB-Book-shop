@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -20,9 +19,9 @@ public class Order {
     @Column(name = "id")
     private int id;
 
-    @OneToMany(mappedBy = "Orders", fetch = FetchType.EAGER,
-            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
-    private List<User> users;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "last_status_update")
     private Timestamp lastStatusUpdate;
