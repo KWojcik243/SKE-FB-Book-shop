@@ -1,8 +1,11 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Author;
+import com.example.demo.entity.Book;
 import com.example.demo.repository.AuthorRepository;
+import com.example.demo.repository.BookRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -25,7 +28,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public void addAuthor(String name, String surname) {
+    public void addAuthor(@RequestParam String name, @RequestParam String surname) {
         Author author = new Author(name, surname);
         authorRepository.save(author);
     }
