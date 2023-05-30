@@ -24,4 +24,9 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAll();
     }
 
+    @Override
+    public void addBook(String title, String pngPath, int ageGroup, float rating, long isbn, int amount) {
+        Book book = new Book(title, pngPath, ageGroup, rating, isbn, amount);
+        bookRepository.save(book);
+    }
 }

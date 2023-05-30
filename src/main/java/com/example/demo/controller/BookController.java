@@ -4,6 +4,7 @@ import com.example.demo.entity.Book;
 import com.example.demo.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,5 +28,16 @@ public class BookController {
     @GetMapping("/books")
     public List<Book> getBooks(){
         return bookService.getBooks();
+    }
+
+    @PostMapping("/book")
+    public void addBook(@RequestParam String title,
+                        @RequestParam String pngPath,
+                        @RequestParam int ageGroup,
+                        @RequestParam float rating,
+                        @RequestParam long isbn,
+                        @RequestParam int amount){
+        bookService.addBook(title, pngPath, ageGroup, rating, isbn, amount);
+
     }
 }
