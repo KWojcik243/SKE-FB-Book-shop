@@ -3,16 +3,16 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 export default function LoginNavBtn() {
-    const userData = {name: "Jan", surname: "Kowalski"};
+    const userData = {name: "Jan", surname: "Kowalski", isadmin: false};
 
     if (userData.name && userData.name.length > 0) {
         return (<>
             <MDBDropdown className='btn-group' >
-                <NavLink to="/account"><MDBBtn className='btn-success' style={{paddingInline: "15px"}}><MDBIcon far icon="user-circle" className='me-2' />{userData.name + " " + userData.surname}</MDBBtn></NavLink>
+                <MDBBtn className='bg-success btn-success' style={{paddingInline: "15px", pointerEvents: "none"}} ><MDBIcon far icon="user-circle" className='me-2' />{userData.name + " " + userData.surname}</MDBBtn>
                 <MDBDropdownToggle split className='btn-success' style={{paddingInline: "15px"}}></MDBDropdownToggle>
                 <MDBDropdownMenu>
-                    <li><NavLink to="/basket" className='dropdown-item'><MDBIcon fas icon="shopping-basket" className='me-3' />Koszyk</NavLink></li>
-                    <li><NavLink to="/orders" className='dropdown-item'><MDBIcon fas icon="th-list"  className='me-3' />Zamówienia</NavLink></li>
+                    {userData.isadmin ? <></> : <li><NavLink to="/basket" className='dropdown-item'><MDBIcon fas icon="shopping-basket" className='me-3' />Koszyk</NavLink></li>}
+                    <li><NavLink to={userData.isadmin ? "/dashboard" : "/orders"} className='dropdown-item'><MDBIcon fas icon={userData.isadmin ? "tools" : "th-list"}  className='me-3' />{userData.isadmin ? "Panel administratora" : "Zamówienia"}</NavLink></li>
                     <li><NavLink to="/logout" className='dropdown-item'><MDBIcon fas icon="sign-out-alt"  className='me-3' />Wyloguj się</NavLink></li>
                 </MDBDropdownMenu>
             </MDBDropdown>
