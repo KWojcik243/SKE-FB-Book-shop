@@ -10,12 +10,12 @@ export default function NotFoundPage() {
             <MDBContainer>
                 <MDBRow>
                     <MDBCol>
-                        <section class="my-5 text-center">
-                            <h1 class="display-3">Błąd 404</h1>
-                            <h5 class="mb-1">Nie oznaleziono strony</h5>
-                            <p class="mb-4 text-muted">{location.pathname}</p>
-                            <p class="mb-4">Szukana przez Ciebie strona nie istnieje lub nie masz wystarczających <br></br>uprawnień, aby uzyskać do niej dostęp.</p>
-                            <a href="/"><MDBBtn>Wróć na stronę główną</MDBBtn></a>
+                        <section className="my-5 text-center">
+                            <h1 className="display-3">Błąd 404</h1>
+                            <h5 className="mb-1">Nie oznaleziono strony</h5>
+                            <p className="mb-4 text-muted">{location.pathname}</p>
+                            <p className="mb-4">Szukana przez Ciebie strona nie istnieje lub nie masz wystarczających <br></br>uprawnień, aby uzyskać do niej dostęp.</p>
+                            <a href="/"><MDBBtn className='btn-success'>Wróć na stronę główną</MDBBtn></a>
                             </section>
                     </MDBCol>
                 </MDBRow>
