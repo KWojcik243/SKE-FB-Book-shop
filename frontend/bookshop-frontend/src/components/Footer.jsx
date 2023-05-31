@@ -24,7 +24,7 @@ export default function Footer() {
 
             <div className='text-center p-4' style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>
                 © {(new Date().getFullYear())} Copyright&nbsp;
-                <a className='text-reset fw-bold' href='/'>
+                <a className='text-reset fw-bold' href='/contact'>
                     SKE Bookshop Team
                 </a>
             </div>

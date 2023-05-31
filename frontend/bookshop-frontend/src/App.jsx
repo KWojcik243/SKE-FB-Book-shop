@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import NotFoundPage from './pages/NotFoundPage';
 import Footer from './components/Footer';
+import ContactPage from './pages/ContactPage';
 
 function App() {
 //   const [count, setCount] = useState(0)
@@ -20,6 +21,7 @@ function App() {
           <Routes>
             <Route path='*' element= { <NotFoundPage /> }></Route>
             <Route path='/' element={ <HomePage /> }></Route>
+            <Route path='/contact' element={ <ContactPage /> }></Route>
             <Route path='/login' element={ <LoginPage /> }></Route>
           </Routes>
         </div>

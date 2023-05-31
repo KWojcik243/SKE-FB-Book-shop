@@ -17,7 +17,7 @@ export default function HomePage() {
                         <div>mrożące krew w żyłach</div>
                         <div>popularno-naukowe</div>
                         <div>historyczne z nutą romansu</div>
-                        <div>i stwórz swoją własną blibliotekę!</div>
+                        <div>i stwórz swoją własną bibliotekę!</div>
                     </div></span>
                 </p>
                 <NavLink to="/catalog">
