@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 public interface AuthorService {
-    public Author getAuthorById(@RequestParam int id);
+    public Author getAuthorById(int id);
     public List<Author> getAuthors();
 
-    public void addAuthor(@RequestParam String name, @RequestParam String surname);
+    public void addAuthor(String name, String surname);
+
+    public boolean existsByNameAndSurname(String name, String surname);
 }

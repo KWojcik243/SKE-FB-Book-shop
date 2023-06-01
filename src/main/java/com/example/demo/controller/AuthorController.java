@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.Author;
 import com.example.demo.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,23 +16,33 @@ public class AuthorController {
     AuthorService authorService;
 
     @Autowired
-    public AuthorController(AuthorService authorService){
+    public AuthorController(AuthorService authorService) {
         this.authorService = authorService;
     }
 
-    @GetMapping("/author")
-    public Author getAuthorByID(@RequestParam int id){
-        return authorService.getAuthorById(id);
+    @GetMapping("/getAuthor")
+    public ResponseEntity<?> getAuthorByID(@RequestParam int id) {
+        Author author = authorService.getAuthorById(id);
+        if (author == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(author);
     }
 
-    @GetMapping("/authors")
-    public List<Author> getAuthors(){
+    @GetMapping("/getAuthors")
+    public List<Author> getAuthors() {
         return authorService.getAuthors();
     }
 
-    @PostMapping("/author")
-    public void addAuthor(@RequestParam String name, @RequestParam String surname){
+    @PostMapping("/addAuthor")
+    public ResponseEntity<String> addAuthor(@RequestParam String name, @RequestParam String surname) {
+        if (authorService.existsByNameAndSurname(name, surname)) {
+            return ResponseEntity.badRequest().body("Author " + name + " " + surname + " already exists.");
+        }
+
         authorService.addAuthor(name, surname);
+        return ResponseEntity.ok().body("Author " + name + " " + surname + " added successfully.");
     }
+
 
 }

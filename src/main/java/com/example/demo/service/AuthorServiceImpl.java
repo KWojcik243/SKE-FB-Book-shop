@@ -28,8 +28,13 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public void addAuthor(@RequestParam String name, @RequestParam String surname) {
+    public void addAuthor(String name, String surname) {
         Author author = new Author(name, surname);
         authorRepository.save(author);
+    }
+
+    @Override
+    public boolean existsByNameAndSurname(String name, String surname) {
+        return authorRepository.existsByNameAndSurname(name, surname);
     }
 }
