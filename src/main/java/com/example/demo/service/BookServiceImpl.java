@@ -59,5 +59,20 @@ public class BookServiceImpl implements BookService {
         }
     }
 
+    @Override
+    public boolean existsByTitle(String title) {
+        return bookRepository.existsByTitle(title);
+    }
+
+    @Override
+    public boolean deleteBook(int bookId) {
+        Optional<Book> optionalBook = bookRepository.findById(bookId);
+        if (optionalBook.isPresent()) {
+            Book book = optionalBook.get();
+            bookRepository.delete(book);
+            return true;
+        }
+        return false;
+    }
 
 }
