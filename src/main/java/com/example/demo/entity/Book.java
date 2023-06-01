@@ -54,4 +54,8 @@ public class Book {
         this.isbn = isbn;
         this.amount = amount;
     }
+
+    public void updateAmountBy(int nAmount){
+        this.amount += nAmount;
+    }
 }
