@@ -9,20 +9,20 @@ import LoginPage from './pages/LoginPage'
 import NotFoundPage from './pages/NotFoundPage';
 import Footer from './components/Footer';
 import ContactPage from './pages/ContactPage';
+import CatalogPage from './pages/CatalogPage';
 
 function App() {
-//   const [count, setCount] = useState(0)
-
   return (
     <Router>
-      <div className='App'>
+      <div className='App d-flex flex-column h-100'>
         <NavBar />
-        <div className='content'>
+        <div className='content flex-fill'>
           <Routes>
             <Route path='*' element= { <NotFoundPage /> }></Route>
             <Route path='/' element={ <HomePage /> }></Route>
             <Route path='/contact' element={ <ContactPage /> }></Route>
             <Route path='/login' element={ <LoginPage /> }></Route>
+            <Route path='/catalog' element={ <CatalogPage /> }></Route>
           </Routes>
         </div>
         <Footer />

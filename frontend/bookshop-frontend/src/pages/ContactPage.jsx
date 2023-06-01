@@ -25,7 +25,7 @@ export default function ContactPage() {
                     </MDBCard>
 
                     <h3 className='mb-3'>Repozytorium:</h3>
-                    <p><a href='https://github.com/KWojcik243/SKE-FB-Book-shop/' target='_blank'><MDBIcon fab icon="github" className='me-2' />Link do repozytorium w serwisie GitHub</a></p>
+                    <p><a href='https://github.com/KWojcik243/SKE-FB-Book-shop/' target='_blank' className='link-success'><MDBIcon fab icon="github" className='me-2' />Link do repozytorium w serwisie GitHub</a></p>
                 </MDBCol>
                 <MDBCol md='3'></MDBCol>
             </MDBRow>

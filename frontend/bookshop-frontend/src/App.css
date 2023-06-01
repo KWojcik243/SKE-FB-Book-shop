@@ -1,3 +1,7 @@
 * {
     --accent: #19a56f;
 }
+
+.App {
+    min-height: 100vh !important;
+}
