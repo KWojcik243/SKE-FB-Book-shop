@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.Author;
 import com.example.demo.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +43,17 @@ public class AuthorController {
 
         authorService.addAuthor(name, surname);
         return ResponseEntity.ok().body("Author " + name + " " + surname + " added successfully.");
+    }
+
+    @PostMapping("/deleteAuthor")
+    public ResponseEntity<String> deleteAuthor(int authorId) {
+        boolean removed = authorService.deleteAuthor(authorId);
+        if (removed) {
+            return ResponseEntity.ok("Author with id " + authorId + " deleted.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Author with id " + authorId + " not found.");
+        }
+        // TODO co jesli usuwamy autora i ksiazka zostaje bez autora? usuwac z bazy?
     }
 
 

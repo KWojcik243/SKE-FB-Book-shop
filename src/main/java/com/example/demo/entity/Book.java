@@ -18,13 +18,14 @@ public class Book {
     @Column(name = "id")
     private int id;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "book_author",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
     private List<Author> authors;
+
 
     @Column(name = "title")
     private String title;
