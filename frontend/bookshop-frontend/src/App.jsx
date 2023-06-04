@@ -10,6 +10,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import Footer from './components/Footer';
 import ContactPage from './pages/ContactPage';
 import CatalogPage from './pages/CatalogPage';
+import '@smastrom/react-rating/style.css';
 
 function App() {
   return (
