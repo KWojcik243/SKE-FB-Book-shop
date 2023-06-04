@@ -11,6 +11,7 @@ import Footer from './components/Footer';
 import ContactPage from './pages/ContactPage';
 import CatalogPage from './pages/CatalogPage';
 import '@smastrom/react-rating/style.css';
+import RegisterPage from './pages/RegisterForm';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path='/' element={ <HomePage /> }></Route>
             <Route path='/contact' element={ <ContactPage /> }></Route>
             <Route path='/login' element={ <LoginPage /> }></Route>
+            <Route path='/register' element={ <RegisterPage /> }></Route>
             <Route path='/catalog' element={ <CatalogPage /> }></Route>
           </Routes>
         </div>
