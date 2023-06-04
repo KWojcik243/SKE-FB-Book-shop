@@ -27,6 +27,11 @@ body {
   border-bottom-width: 2px !important;
 }
 
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
 *::-webkit-scrollbar {
   background-color: #fff;
   width: 16px;

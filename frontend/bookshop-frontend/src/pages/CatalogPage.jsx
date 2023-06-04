@@ -1,11 +1,12 @@
 import { Rating } from '@smastrom/react-rating';
 import { MDBBtn, MDBBtnGroup, MDBCard, MDBCardBody, MDBCardFooter, MDBCardImage, MDBCardText, MDBCardTitle, MDBCol, MDBContainer, MDBIcon, MDBInput, MDBRow, MDBTooltip } from 'mdb-react-ui-kit';
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function CatalogPage() {
     const [search, setSearch] = useState('');
 
-    const userData = { isadmin: true };
+    const userData = { isadmin: false };
     const bookList = [
         { id: 0, title: "Pan Tadeusz", rating: 5, author: "Adam Mickiewicz", category: "literatura polska", cover: "https://cdn.pixabay.com/photo/2015/01/24/14/03/book-610189_1280.jpg" },
         { id: 1, title: "XX", rating: 2.5, author: "sddf dsffd", category: "literatura zagraniczna", cover: "https://cdn.pixabay.com/photo/2015/01/24/14/03/book-610189_1280.jpg" },
@@ -42,8 +43,8 @@ export default function CatalogPage() {
                     </MDBCardBody>
                     <MDBCardFooter className='text-center'>
                         <MDBBtnGroup>
-                            <MDBBtn className='btn-success' href='#'><MDBIcon fas icon="book-open me-2" />Pokaż książkę</MDBBtn>
-                            {userData.isadmin &&
+                            <Link to={'/preview?id=' + book.id}><MDBBtn className='btn-success' href='#'><MDBIcon fas icon="book-open me-2" />Pokaż książkę</MDBBtn></Link>
+                            {!userData.isadmin &&
                                 <MDBTooltip wrapperProps={{ color: "dark" }} placement='top' title='Dodaj do koszyka'>
                                     <MDBIcon fas icon="cart-plus" />
                                 </MDBTooltip>
@@ -62,9 +63,6 @@ export default function CatalogPage() {
                     <MDBCol md='3'></MDBCol>
                     <MDBCol md='6'>
                         <MDBInput className='my-2 bg-white w-100' label='Szukaj książki' onChange={(e) => setSearch(e.target.value.toLowerCase())} />
-                        {userData.isadmin && <MDBBtnGroup toolbar className='my-2' role='toolbar'>
-
-                        </MDBBtnGroup>}
 
                         {bookCards}
                     </MDBCol>
