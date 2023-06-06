@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 export default function CatalogPage() {
     const [search, setSearch] = useState('');
 
-    const userData = { isadmin: false };
+    const userData = { name: "X", isadmin: false };
     const bookList = [
         { id: 0, title: "Pan Tadeusz", rating: 5, author: "Adam Mickiewicz", category: "literatura polska", cover: "https://cdn.pixabay.com/photo/2015/01/24/14/03/book-610189_1280.jpg" },
         { id: 1, title: "XX", rating: 2.5, author: "sddf dsffd", category: "literatura zagraniczna", cover: "https://cdn.pixabay.com/photo/2015/01/24/14/03/book-610189_1280.jpg" },
@@ -44,7 +44,7 @@ export default function CatalogPage() {
                     <MDBCardFooter className='text-center'>
                         <MDBBtnGroup>
                             <Link to={'/preview?id=' + book.id}><MDBBtn className='btn-success' href='#'><MDBIcon fas icon="book-open me-2" />Pokaż książkę</MDBBtn></Link>
-                            {!userData.isadmin &&
+                            {userData.name && !userData.isadmin &&
                                 <MDBTooltip wrapperProps={{ color: "dark" }} placement='top' title='Dodaj do koszyka'>
                                     <MDBIcon fas icon="cart-plus" />
                                 </MDBTooltip>
@@ -69,7 +69,6 @@ export default function CatalogPage() {
                     <MDBCol md='3'></MDBCol>
                 </MDBRow>
             </MDBContainer>
-
         </>
     );
 }

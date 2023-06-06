@@ -11,9 +11,10 @@ import Footer from './components/Footer';
 import ContactPage from './pages/ContactPage';
 import CatalogPage from './pages/CatalogPage';
 import '@smastrom/react-rating/style.css';
-import RegisterPage from './pages/RegisterForm';
+import RegisterPage from './pages/RegisterPage';
 import BookPreviewPage from './pages/BookPreviewPage';
 import BasketPage from './pages/BasketPage';
+import OrdersPage from './pages/OrdersPage';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route path='/catalog' element={ <CatalogPage /> }></Route>
             <Route path='/preview' element={ <BookPreviewPage /> }></Route>
             <Route path='/basket' element={ <BasketPage /> }></Route>
+            <Route path='/orders' element={ <OrdersPage /> }></Route>
           </Routes>
         </div>
         <Footer />

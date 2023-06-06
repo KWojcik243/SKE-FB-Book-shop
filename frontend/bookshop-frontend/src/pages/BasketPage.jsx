@@ -1,5 +1,6 @@
 import { MDBCol, MDBContainer, MDBIcon, MDBListGroup, MDBListGroupItem, MDBRadio, MDBRow, MDBTabs, MDBTabsContent, MDBTabsItem, MDBTabsLink, MDBTabsPane, MDBTooltip } from 'mdb-react-ui-kit';
 import { useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export default function BasketPage() {
     const basket = [
@@ -14,6 +15,11 @@ export default function BasketPage() {
 
         setPaymentType(value);
     };
+
+    const userData = {name: "X"};
+
+    if (!userData.name) 
+        return <Navigate to="/"></Navigate>;
 
     if (basket.length < 1)
         return (<>
@@ -52,10 +58,12 @@ export default function BasketPage() {
 
                     <h2 className='text-center mb-5'>Złóż zamówienie</h2>
 
-                    <form className="needs-validation" novalidate="">
+                    <h4 className="mb-3">Dane korespondencyjne</h4>
+
+                    <form className="needs-validation" noValidate>
                         <div className="row g-3">
                             <div className="col-12">
-                                <label for="address" className="form-label">Adres</label>
+                                <label htmlFor="address" className="form-label">Adres</label>
                                 <input type="text" className="form-control" id="address" placeholder="" required="" />
                                 <div className="invalid-feedback">
                                     Podaj swój adres.
@@ -63,7 +71,7 @@ export default function BasketPage() {
                             </div>
 
                             <div className="col-sm-6">
-                                <label for="address" className="form-label">Miejscowość</label>
+                                <label htmlFor="address" className="form-label">Miejscowość</label>
                                 <input type="text" className="form-control" id="city" placeholder="" required="" />
                                 <div className="invalid-feedback">
                                     Podaj miejscowość.
@@ -71,7 +79,7 @@ export default function BasketPage() {
                             </div>
 
                             <div className="col-sm-6">
-                                <label for="zip" className="form-label">Kod pocztowy</label>
+                                <label htmlFor="zip" className="form-label">Kod pocztowy</label>
                                 <input type="text" className="form-control" id="zip" placeholder="" required="" />
                                 <div className="invalid-feedback">
                                     Podaj poprawny kod pocztowy.
@@ -79,9 +87,7 @@ export default function BasketPage() {
                             </div>
                         </div>
 
-                        <hr className="my-4"></hr>
-
-                        <h4 className="mb-3">Płatność</h4>
+                        <h4 className="mb-3 mt-4">Płatność</h4>
 
                         <MDBRow>
                             <MDBCol size='3'>
@@ -98,7 +104,7 @@ export default function BasketPage() {
                                     <MDBTabsPane show={paymentType === 'card'}>
                                         <div className="row gy-3">
                                             <div className="col-md-6">
-                                                <label for="cc-name" className="form-label">Dane na karcie</label>
+                                                <label htmlFor="cc-name" className="form-label">Dane na karcie</label>
                                                 <input type="text" className="form-control" id="cc-name" placeholder="" required="" />
                                                 <small className="text-muted">Pełne imię i nazwisko na karcie</small>
                                                 <div className="invalid-feedback">
@@ -107,7 +113,7 @@ export default function BasketPage() {
                                             </div>
 
                                             <div className="col-md-6">
-                                                <label for="cc-number" className="form-label">Numer karty</label>
+                                                <label htmlFor="cc-number" className="form-label">Numer karty</label>
                                                 <input type="text" className="form-control" id="cc-number" placeholder="" required="" />
                                                 <div className="invalid-feedback">
                                                     Wymagany
@@ -115,7 +121,7 @@ export default function BasketPage() {
                                             </div>
 
                                             <div className="col-md-3">
-                                                <label for="cc-expiration" className="form-label">Ważność</label>
+                                                <label htmlFor="cc-expiration" className="form-label">Ważność</label>
                                                 <input type="text" className="form-control" id="cc-expiration" placeholder="" required="" />
                                                 <div className="invalid-feedback">
                                                     Wymagana
@@ -123,7 +129,7 @@ export default function BasketPage() {
                                             </div>
 
                                             <div className="col-md-3">
-                                                <label for="cc-cvv" className="form-label">CVV</label>
+                                                <label htmlFor="cc-cvv" className="form-label">CVV</label>
                                                 <input type="text" className="form-control" id="cc-cvv" placeholder="" required="" />
                                                 <div className="invalid-feedback">
                                                     Wymagany

@@ -23,7 +23,7 @@ export default function BookPreviewPage() {
         amount: 10,
         isbn: "12021-1221-12"
     };
-    const userData = { isadmin: false };
+    const userData = { name: "X", isadmin: false };
 
     return (<>
         <MDBContainer className='my-5'>
@@ -75,7 +75,7 @@ export default function BookPreviewPage() {
                                             </MDBTabsPane>
                                         </MDBTabsContent>
                                         <div className='d-flex justify-content-end'>
-                                            {!userData.isadmin && <MDBBtnGroup className='mt-4 text-end'> {/*A dodano do koszyka?*/}
+                                            {userData.name && !userData.isadmin && <MDBBtnGroup className='mt-4 text-end'> {/*A dodano do koszyka?*/}
                                             <MDBBtn color='dark'><MDBIcon fas icon="cart-plus me-2" />Dodaj do koszyka</MDBBtn>
                                         </MDBBtnGroup>}
                                         </div>
