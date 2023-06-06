@@ -1,4 +1,5 @@
-import { MDBCol, MDBContainer, MDBIcon, MDBListGroup, MDBListGroupItem, MDBRow, MDBTooltip } from 'mdb-react-ui-kit';
+import { MDBCol, MDBContainer, MDBIcon, MDBListGroup, MDBListGroupItem, MDBRadio, MDBRow, MDBTabs, MDBTabsContent, MDBTabsItem, MDBTabsLink, MDBTabsPane, MDBTooltip } from 'mdb-react-ui-kit';
+import { useState } from 'react';
 
 export default function BasketPage() {
     const basket = [
@@ -6,6 +7,13 @@ export default function BasketPage() {
         { id: 1, title: "cccv c ", author: "ddd" }
     ];
     // const basket = [];
+
+    const [paymentType, setPaymentType] = useState('delivery');
+    const handlePaymentType = (value) => {
+        if (value === paymentType) return;
+
+        setPaymentType(value);
+    };
 
     if (basket.length < 1)
         return (<>
@@ -75,44 +83,61 @@ export default function BasketPage() {
 
                         <h4 className="mb-3">Płatność</h4>
 
-                        <div className="row gy-3">
-                            <div className="col-md-6">
-                                <label for="cc-name" className="form-label">Name on card</label>
-                                <input type="text" className="form-control" id="cc-name" placeholder="" required="" />
-                                <small className="text-muted">Full name as displayed on card</small>
-                                <div className="invalid-feedback">
-                                    Name on card is required
-                                </div>
-                            </div>
+                        <MDBRow>
+                            <MDBCol size='3'>
+                                <MDBTabs className='flex-column text-start fw-bold gap-3'>
+                                    <MDBRadio name="payment-delivery" id='payment-delivery-radio' label="Przy odbiorze" onChange={() => handlePaymentType('delivery')} onClick={() => handlePaymentType('delivery')} checked={paymentType === 'delivery'}></MDBRadio>
+                                    <MDBRadio name="payment-card" id='payment-card-radio' label={"Kartą z\u00A0góry"} onChange={() => handlePaymentType('card')} onClick={() => handlePaymentType('card')} checked={paymentType === 'card'}></MDBRadio>
+                                </MDBTabs>
+                            </MDBCol>
+                            <MDBCol size='9'>
+                                <MDBTabsContent>
+                                    <MDBTabsPane show={paymentType === 'delivery'}>
+                                        Płatność zostanie zrealizowana przy odbiorze.
+                                    </MDBTabsPane>
+                                    <MDBTabsPane show={paymentType === 'card'}>
+                                        <div className="row gy-3">
+                                            <div className="col-md-6">
+                                                <label for="cc-name" className="form-label">Dane na karcie</label>
+                                                <input type="text" className="form-control" id="cc-name" placeholder="" required="" />
+                                                <small className="text-muted">Pełne imię i nazwisko na karcie</small>
+                                                <div className="invalid-feedback">
+                                                    Wymagane
+                                                </div>
+                                            </div>
 
-                            <div className="col-md-6">
-                                <label for="cc-number" className="form-label">Credit card number</label>
-                                <input type="text" className="form-control" id="cc-number" placeholder="" required="" />
-                                <div className="invalid-feedback">
-                                    Credit card number is required
-                                </div>
-                            </div>
+                                            <div className="col-md-6">
+                                                <label for="cc-number" className="form-label">Numer karty</label>
+                                                <input type="text" className="form-control" id="cc-number" placeholder="" required="" />
+                                                <div className="invalid-feedback">
+                                                    Wymagany
+                                                </div>
+                                            </div>
 
-                            <div className="col-md-3">
-                                <label for="cc-expiration" className="form-label">Expiration</label>
-                                <input type="text" className="form-control" id="cc-expiration" placeholder="" required="" />
-                                <div className="invalid-feedback">
-                                    Expiration date required
-                                </div>
-                            </div>
+                                            <div className="col-md-3">
+                                                <label for="cc-expiration" className="form-label">Ważność</label>
+                                                <input type="text" className="form-control" id="cc-expiration" placeholder="" required="" />
+                                                <div className="invalid-feedback">
+                                                    Wymagana
+                                                </div>
+                                            </div>
 
-                            <div className="col-md-3">
-                                <label for="cc-cvv" className="form-label">CVV</label>
-                                <input type="text" className="form-control" id="cc-cvv" placeholder="" required="" />
-                                <div className="invalid-feedback">
-                                    Security code required
-                                </div>
-                            </div>
-                        </div>
+                                            <div className="col-md-3">
+                                                <label for="cc-cvv" className="form-label">CVV</label>
+                                                <input type="text" className="form-control" id="cc-cvv" placeholder="" required="" />
+                                                <div className="invalid-feedback">
+                                                    Wymagany
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </MDBTabsPane>
+                                </MDBTabsContent>
+                            </MDBCol>
+                        </MDBRow>
 
                         <hr className="my-4"></hr>
 
-                        <button className="w-100 btn btn-success btn-lg" type="submit"><MDBIcon fas icon="truck" className='me-2' />Zapłać i zamów</button>
+                        <button className="w-100 btn btn-success btn-lg" type="submit"><MDBIcon fas icon="truck" className='me-2' />Zamów książki</button>
                     </form>
                 </MDBCol>
                 <MDBCol md='3'></MDBCol>

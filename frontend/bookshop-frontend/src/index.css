@@ -32,6 +32,15 @@ body {
   border-color: var(--accent);
 }
 
+.form-check-input[type=radio]:checked:after {
+  border-color: var(--accent);
+  background-color: var(--accent);
+}
+
+.form-check-input:checked, .form-check-input:checked:focus {
+  border-color: var(--accent);
+}
+
 *::-webkit-scrollbar {
   background-color: #fff;
   width: 16px;
