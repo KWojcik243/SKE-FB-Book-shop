@@ -19,7 +19,7 @@ body {
 .form-outline .form-control:focus~.form-notch .form-notch-leading,
 .form-outline .form-control:focus~.form-notch .form-notch-trailing {
   border-color: var(--accent) !important;
-  border-width: 2px !important; 
+  border-width: 2px !important;
 }
 
 .form-outline .form-control:focus~.form-notch .form-notch-middle {
@@ -27,7 +27,8 @@ body {
   border-bottom-width: 2px !important;
 }
 
-.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
   color: var(--accent);
   border-color: var(--accent);
 }
@@ -37,8 +38,21 @@ body {
   background-color: var(--accent);
 }
 
-.form-check-input:checked, .form-check-input:checked:focus {
+.form-check-input:checked,
+.form-check-input:checked:focus {
   border-color: var(--accent);
+}
+
+@media (max-width: 991.98px) {
+  .sidebar {
+    width: auto !important;
+  }
+}
+
+.list-group-item.active {
+  background-color: #d0f3e1;
+  color: #17895d;
+  border-color: #d0f3e1;
 }
 
 *::-webkit-scrollbar {
