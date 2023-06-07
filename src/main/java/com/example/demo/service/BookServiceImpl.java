@@ -5,7 +5,6 @@ import com.example.demo.entity.Book;
 import com.example.demo.repository.AuthorRepository;
 import com.example.demo.repository.BookRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +21,7 @@ public class BookServiceImpl implements BookService {
         this.authorRepository = authorRepository;
     }
 
-    public Book getBookById(@RequestParam int id) {
+    public Book getBookById(int id) {
         return bookRepository.findById(id).orElse(null);
     }
 
@@ -31,13 +30,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void addBook(@RequestParam String title,
-                        @RequestParam String pngPath,
-                        @RequestParam int ageGroup,
-                        @RequestParam float rating,
-                        @RequestParam long isbn,
-                        @RequestParam int amount,
-                        List<Integer> authorIds) {
+    public void addBook(String title, String pngPath, int ageGroup, float rating, long isbn, int amount, List<Integer> authorIds) {
         List<Author> authors = authorRepository.findAllById(authorIds);
         Book book = new Book(title, pngPath, ageGroup, rating, isbn, amount);
         if (!authors.isEmpty()) {

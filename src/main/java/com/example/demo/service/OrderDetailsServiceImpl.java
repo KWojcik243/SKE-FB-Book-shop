@@ -7,7 +7,9 @@ import com.example.demo.repository.BookRepository;
 import com.example.demo.repository.OrderDetailsRepository;
 import com.example.demo.repository.OrderRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderDetailsServiceImpl implements OrderDetailsService {
@@ -55,8 +57,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
     }
 
     @Override
-    public void addOrderDetails(@RequestParam int status,
-                                @RequestParam int orderId) {
+    public void addOrderDetails(int status, int orderId) {
         OrderDetails orderDetails = new OrderDetails(status);
 
         // set order
@@ -64,5 +65,24 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
         orderDetails.setOrder(order);
 
         this.orderDetailsRepository.save(orderDetails);
+    }
+
+    @Override
+    public void deleteOrderDetails(int id) {
+        OrderDetails orderDetails = orderDetailsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order details not found with id: " + id));
+
+        List<Book> books = orderDetails.getBooks();
+        for (Book book : books) {
+            book.updateAmountBy(1);
+        }
+
+        orderDetailsRepository.delete(orderDetails);
+    }
+
+    @Override
+    public OrderDetails getOrderDetails(int orderDetailsId) {
+        Optional<OrderDetails> optionalOrderDetails = orderDetailsRepository.findById(orderDetailsId);
+        return optionalOrderDetails.orElse(null);
     }
 }

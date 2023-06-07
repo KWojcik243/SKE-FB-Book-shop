@@ -3,36 +3,43 @@ package com.example.demo.controller;
 import com.example.demo.entity.Order;
 import com.example.demo.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
+@RequestMapping("/orders")
 public class OrderController {
-    OrderService orderService;
+    private final OrderService orderService;
 
     @Autowired
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
 
-    @GetMapping("/getOrdersByUser")
-    public List<Order> getOrdersByUserId(@RequestParam int id) {
+    @GetMapping("/user/{id}")
+    public List<Order> getOrdersByUserId(@PathVariable int id) {
         return orderService.getOrdersByUserId(id);
     }
 
-    @PostMapping("/addOrder")
+    @PostMapping
     public void addOrder(@RequestParam Timestamp lastStatusUpdate,
                          @RequestParam String status,
                          @RequestParam int paymentType,
                          @RequestParam String address,
                          @RequestParam String city,
                          @RequestParam String postCode) {
-        this.orderService.addOrder(lastStatusUpdate, status, paymentType, address, city, postCode);
+        orderService.addOrder(lastStatusUpdate, status, paymentType, address, city, postCode);
     }
 
+    @DeleteMapping("/delete/{orderId}")
+    public void deleteOrder(@PathVariable int orderId) {
+        orderService.deleteOrder(orderId);
+    }
+
+    @PutMapping("/{orderId}")
+    public void updateOrderStatus(@PathVariable int orderId, @RequestParam String newStatus) {
+        orderService.updateOrderStatus(orderId, newStatus);
+    }
 }

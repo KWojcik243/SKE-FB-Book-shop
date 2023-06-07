@@ -1,27 +1,27 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.OrderDetails;
 import com.example.demo.service.OrderDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/order-details")
 public class OrderDetailsController {
-    OrderDetailsService orderDetailsService;
+    private final OrderDetailsService orderDetailsService;
 
     @Autowired
     public OrderDetailsController(OrderDetailsService orderDetailsService) {
         this.orderDetailsService = orderDetailsService;
     }
 
-    @PostMapping("/addOrderDetails")
+    @PostMapping
     public ResponseEntity<String> addOrderDetails(@RequestParam int status,
                                                   @RequestParam int orderId,
-                                                  List<Integer> bookIds) {
+                                                  @RequestParam List<Integer> bookIds) {
         for (Integer bookId : bookIds) {
             boolean added = orderDetailsService.addBookToOrderDetailsStatus(orderId, bookId);
             if (!added) {
@@ -32,7 +32,7 @@ public class OrderDetailsController {
         return ResponseEntity.ok("Order details added successfully.");
     }
 
-    @PostMapping("/addBookToOrderDetails")
+    @PostMapping("/add-book-to-order")
     public ResponseEntity<String> addBookToOrderDetails(@RequestParam int orderDetailsId,
                                                         @RequestParam int bookId) {
         boolean added = orderDetailsService.addBookToOrderDetailsStatus(orderDetailsId, bookId);
@@ -43,17 +43,33 @@ public class OrderDetailsController {
         }
     }
 
-    @PostMapping("/deleteBookFromOrderDetails")
+    @DeleteMapping("/delete-book-from-order")
     public ResponseEntity<String> deleteBookFromOrderDetails(@RequestParam int orderDetailsId,
                                                              @RequestParam int bookId) {
         orderDetailsService.removeBookFromOrderDetails(orderDetailsId, bookId);
         return ResponseEntity.ok("Book deleted successfully from order.");
     }
 
-    @PostMapping("/updateOrderDetailsStatus")
+    @PutMapping("/update-status")
     public ResponseEntity<String> updateOrderDetailsStatus(@RequestParam int orderDetailsId,
                                                            @RequestParam int status) {
-        this.orderDetailsService.updateOrderDetailsStatus(orderDetailsId, status);
-        return ResponseEntity.ok("Order details status updated succesfully.");
+        orderDetailsService.updateOrderDetailsStatus(orderDetailsId, status);
+        return ResponseEntity.ok("Order details status updated successfully.");
     }
+
+    @DeleteMapping("/delete/{orderDetailsId}")
+    public ResponseEntity<String> deleteOrderDetails(@PathVariable int orderDetailsId) {
+        orderDetailsService.deleteOrderDetails(orderDetailsId);
+        return ResponseEntity.ok("Order details deleted successfully.");
+    }
+
+    @GetMapping("/{orderDetailsId}")
+    public ResponseEntity<OrderDetails> getOrderDetails(@PathVariable int orderDetailsId) {
+        OrderDetails orderDetails = orderDetailsService.getOrderDetails(orderDetailsId);
+        if (orderDetails == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(orderDetails);
+    }
+
 }
