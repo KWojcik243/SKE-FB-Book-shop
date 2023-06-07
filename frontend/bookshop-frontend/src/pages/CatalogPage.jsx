@@ -1,20 +1,30 @@
 import { Rating } from '@smastrom/react-rating';
 import { MDBBtn, MDBBtnGroup, MDBCard, MDBCardBody, MDBCardFooter, MDBCardImage, MDBCardText, MDBCardTitle, MDBCol, MDBContainer, MDBIcon, MDBInput, MDBRow, MDBTooltip } from 'mdb-react-ui-kit';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 export default function CatalogPage() {
     const [search, setSearch] = useState('');
 
     const userData = { name: "X", isadmin: false };
-    const bookList = [
-        { id: 0, title: "Pan Tadeusz", rating: 5, author: "Adam Mickiewicz", category: "literatura polska", cover: "https://cdn.pixabay.com/photo/2015/01/24/14/03/book-610189_1280.jpg" },
-        { id: 1, title: "XX", rating: 2.5, author: "sddf dsffd", category: "literatura zagraniczna", cover: "https://cdn.pixabay.com/photo/2015/01/24/14/03/book-610189_1280.jpg" },
-        { id: 2, title: "xd", rating: 4, author: "dfds sfdfsd", category: "literatura polska", cover: "https://cdn.pixabay.com/photo/2015/01/24/14/03/book-610189_1280.jpg" },
-        { id: 3, title: "xc", rating: 3, author: "Adam Mickiewicz", category: "fantasy", cover: "https://cdn.pixabay.com/photo/2015/01/24/14/03/book-610189_1280.jpg" },
-        // { id: 4, title: "xzcxz", rating: 4.7, author: "ds f", category: "literatura polska", cover: "https://cdn.pixabay.com/photo/2015/01/24/14/03/book-610189_1280.jpg" },
-        { id: 5, title: "xczxz", rating: 3.33, author: "fd sd", category: "horror", cover: "https://cdn.pixabay.com/photo/2015/01/24/14/03/book-610189_1280.jpg" },
-    ];
+
+    const [bookList, setBookList] = useState([]);
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/books');
+            setBookList(response.data);
+        } catch (error) {
+            console.error('Błąd podczas pobierania danych z serwera', error);
+        }
+    };
+
+    console.log(bookList);
 
     const bookCards = <MDBRow className='row-cols-1 row-cols-md-2 g-4 mt-3'>
         {bookList.filter((item) => {
@@ -22,11 +32,11 @@ export default function CatalogPage() {
         }).map((book, i) => <>
             <MDBCol key={i}>
                 <MDBCard className='h-100' key={i}>
-                    <MDBCardImage src={book.cover} alt={book.title} position='top' />
+                    <MDBCardImage src={book.pngPath} alt={book.title} position='top' />
                     <MDBCardBody>
                         <MDBCardTitle>{book.title}</MDBCardTitle>
                         <MDBCardText className='mb-1'>
-                            <strong>{book.author}</strong>
+                            <strong>{book.authors && book.authors.map((author) => author.name + " " + author.surname).join(', ')}</strong>
                         </MDBCardText>
                         <div className='w-100 d-flex justify-content-end'>
                             <div style={{ width: "50%" }}>

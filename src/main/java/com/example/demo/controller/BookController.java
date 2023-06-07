@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/books")
+@CrossOrigin(origins = "http://localhost:5173")
 public class BookController {
 
     private final BookService bookService;
@@ -41,12 +42,13 @@ public class BookController {
                                           @RequestParam float rating,
                                           @RequestParam long isbn,
                                           @RequestParam int amount,
-                                          @RequestParam List<Integer> authorIds) {
+                                          @RequestParam List<Integer> authorIds,
+                                          @RequestParam int categoryId) {
         if (bookService.existsByTitle(title)) {
             return ResponseEntity.badRequest().body("Book with title " + title + " already exists.");
         }
 
-        bookService.addBook(title, pngPath, ageGroup, rating, isbn, amount, authorIds);
+        bookService.addBook(title, pngPath, ageGroup, rating, isbn, amount, authorIds, categoryId);
         return ResponseEntity.ok().body("Book " + title + " added successfully.");
     }
 

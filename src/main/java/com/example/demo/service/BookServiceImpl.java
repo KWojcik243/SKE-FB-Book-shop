@@ -2,7 +2,9 @@ package com.example.demo.service;
 
 import com.example.demo.entity.Author;
 import com.example.demo.entity.Book;
+import com.example.demo.entity.BookCategory;
 import com.example.demo.repository.AuthorRepository;
+import com.example.demo.repository.BookCategoryRepository;
 import com.example.demo.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +17,13 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
+    private final BookCategoryRepository bookCategoryRepository;
 
-    public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository) {
+    public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository,
+                           BookCategoryRepository bookCategoryRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
+        this.bookCategoryRepository = bookCategoryRepository;
     }
 
     public Book getBookById(int id) {
@@ -30,13 +35,15 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void addBook(String title, String pngPath, int ageGroup, float rating, long isbn, int amount, List<Integer> authorIds) {
+    public void addBook(String title, String pngPath, int ageGroup, float rating, long isbn, int amount, List<Integer> authorIds, int bookCategoryId) {
         List<Author> authors = authorRepository.findAllById(authorIds);
         Book book = new Book(title, pngPath, ageGroup, rating, isbn, amount);
         if (!authors.isEmpty()) {
             book.setAuthors(authors);
-            bookRepository.save(book);
         }
+        BookCategory bookCategory = bookCategoryRepository.getReferenceById(bookCategoryId);
+        book.setCategory(bookCategory);
+        bookRepository.save(book);
     }
 
     @Override
@@ -62,10 +69,14 @@ public class BookServiceImpl implements BookService {
         Optional<Book> optionalBook = bookRepository.findById(bookId);
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
+
+            book.setAuthors(Collections.emptyList());
+
             bookRepository.delete(book);
             return true;
         }
         return false;
     }
+
 
 }

@@ -1,9 +1,11 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
 
@@ -26,7 +28,6 @@ public class Book {
     )
     private List<Author> authors;
 
-
     @Column(name = "title")
     private String title;
 
@@ -45,6 +46,10 @@ public class Book {
     @Column(name = "amount")
     private int amount;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
+    private BookCategory category;
+
     public Book() {}
 
     public Book(String title, String pngPath, int ageGroup, float rating, long isbn, int amount) {
@@ -58,5 +63,13 @@ public class Book {
 
     public void updateAmountBy(int nAmount){
         this.amount += nAmount;
+    }
+
+    @JsonProperty("category")
+    public String getCategoryName() {
+        if (category != null) {
+            return category.getCategory();
+        }
+        return null;
     }
 }

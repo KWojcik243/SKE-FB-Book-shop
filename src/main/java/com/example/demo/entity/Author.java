@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@JsonIgnoreProperties("books")
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +25,9 @@ public class Author {
 
     @Column(name = "surname")
     private String surname;
+
+    @ManyToMany(mappedBy = "authors", fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
+    private List<Book> books;
 
     public Author() {}
 

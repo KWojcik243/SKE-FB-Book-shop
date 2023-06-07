@@ -15,7 +15,8 @@ public interface BookService {
                         float rating,
                         long isbn,
                         int amount,
-                        List<Integer> authorIds);
+                        List<Integer> authorIds,
+                        int categoryId);
 
     public List<Book> getBooksByAuthorId(int id);
 
