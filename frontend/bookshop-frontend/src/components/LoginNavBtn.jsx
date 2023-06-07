@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 export default function LoginNavBtn() {
-    const userData = {name: "Jan", surname: "Kowalski", isadmin: true};
+    const userData = {name: "", surname: "Kowalski", isadmin: false};
 
     if (userData.name && userData.name.length > 0) {
         return (<>

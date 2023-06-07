@@ -1,4 +1,4 @@
-import { MDBBadge, MDBBtn, MDBIcon, MDBInputGroup, MDBTable, MDBTableBody, MDBTableHead } from "mdb-react-ui-kit";
+import { MDBBadge, MDBBtn, MDBIcon, MDBInputGroup, MDBModal, MDBModalBody, MDBModalContent, MDBModalDialog, MDBModalFooter, MDBModalHeader, MDBModalTitle, MDBTable, MDBTableBody, MDBTableHead } from "mdb-react-ui-kit";
 import { useState } from "react";
 
 
@@ -6,7 +6,7 @@ export default function DashboardBooks() {
     const [search, setSearch] = useState('');
 
     const books = [{
-        id: 0,
+        id: 1,
         title: "Pan Tadeusz",
         rating: 5,
         author: "Adam Mickiewicz",
@@ -17,9 +17,89 @@ export default function DashboardBooks() {
         isbn: "12021-1221-12"
     }];
 
+    const [activeBookId, setActiveBookId] = useState(0);
+    const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
+    const [modifyDialogVisible, setModifyDialogVisible] = useState(false);
+    const [modifyDialogEdit, setModifyDialogEdit] = useState(false);
+    const [modifyData, setModifyData] = useState({});
+
+    const toggleDeleteDialog = () => setDeleteDialogVisible(!deleteDialogVisible);
+    const toggleModifyDialog = () => setModifyDialogVisible(!modifyDialogVisible);
+
+    const deleteBook = () => {
+        //activeBookId...
+
+        toggleDeleteDialog();
+    };
+
+    const addBook = () => {
+
+
+        toggleModifyDialog();
+    };
+
+    const changeBook = () => {
+
+
+        toggleModifyDialog();
+    };
+
+    const deleteDialog = <>
+        <MDBModal show={deleteDialogVisible} setShow={setDeleteDialogVisible} tabIndex='-1'>
+            <MDBModalDialog>
+                <MDBModalContent>
+                    <MDBModalHeader>
+                        <MDBModalTitle>Usuwanie</MDBModalTitle>
+                        <MDBBtn className='btn-close' color='none' onClick={toggleDeleteDialog}></MDBBtn>
+                    </MDBModalHeader>
+                    <MDBModalBody>Czy na pewno chcesz usunąć tę książkę?</MDBModalBody>
+
+                    <MDBModalFooter>
+                        <MDBBtn color='link' onClick={toggleDeleteDialog}>Anuluj</MDBBtn>
+                        <MDBBtn color="danger" onClick={deleteBook}>Usuń</MDBBtn>
+                    </MDBModalFooter>
+                </MDBModalContent>
+            </MDBModalDialog>
+        </MDBModal>
+    </>;
+
+    const modifyDialog = <>
+        <MDBModal show={modifyDialogVisible} setShow={setModifyDialogVisible} tabIndex='-1'>
+            <MDBModalDialog>
+                <MDBModalContent>
+                    <MDBModalHeader>
+                        <MDBModalTitle>Książka</MDBModalTitle>
+                        <MDBBtn className='btn-close' color='none' onClick={toggleModifyDialog}></MDBBtn>
+                    </MDBModalHeader>
+                    <MDBModalBody>XXX</MDBModalBody>
+
+                    <MDBModalFooter>
+                        <MDBBtn color='link' onClick={toggleModifyDialog}>Anuluj</MDBBtn>
+                        {!modifyDialogEdit && <MDBBtn color="success" onClick={addBook}>Dodaj książkę</MDBBtn>}
+                        {modifyDialogEdit && <MDBBtn color="success" onClick={changeBook}>Zmień książkę</MDBBtn>}
+                    </MDBModalFooter>
+                </MDBModalContent>
+            </MDBModalDialog>
+        </MDBModal>
+    </>;
+
+    const showDeleteDialog = (id) => {
+        setActiveBookId(id);
+        toggleDeleteDialog();
+    };
+
+    const showModifyDialog = (edit, id = 0) => {
+        setModifyDialogEdit(edit);
+
+        if (edit)
+            setActiveBookId(id);
+
+        toggleModifyDialog();
+    };
+
     return (<>
         <div className="mb-3">
-            <MDBInputGroup className='mb-3' textTag='div' noBorder textBefore={<MDBBtn color="dark" size="lg"><MDBIcon fas icon="plus-circle" className="me-2" />Dodaj książkę</MDBBtn>}>
+            <MDBInputGroup className='mb-3' textTag='div' noBorder textBefore={<MDBBtn color="dark" size="lg" onClick={() => showModifyDialog(false)}><MDBIcon fas icon="plus-circle" className="me-2" />Dodaj książkę</MDBBtn>}>
                 <input className='form-control' type='text' placeholder="Szukaj książki..." onChange={(e) => setSearch(e.target.value.toLowerCase())} />
             </MDBInputGroup>
         </div>
@@ -49,13 +129,16 @@ export default function DashboardBooks() {
                             <td>{book.category}</td>
                             <td>{book.isbn}</td>
                             <td className="text-center">
-                                <MDBBtn outline rounded color='success' size='sm' className="m-1"><MDBIcon fas icon="pen" className="me-2" />Edytuj</MDBBtn>
-                                <MDBBtn outline rounded color='danger' size='sm' className="m-1"><MDBIcon fas icon="trash" className="me-2" />Usuń</MDBBtn>
+                                <MDBBtn outline rounded color='success' size='sm' className="m-1" onClick={() => showModifyDialog(true, book.id)}><MDBIcon fas icon="pen" className="me-2" />Edytuj</MDBBtn>
+                                <MDBBtn outline rounded color='danger' size='sm' className="m-1" onClick={() => showDeleteDialog(book.id)}><MDBIcon fas icon="trash" className="me-2" />Usuń</MDBBtn>
                             </td>
                         </tr>);
                     })}
                 </MDBTableBody>
             </MDBTable>
         </div>
+
+        {deleteDialog}
+        {modifyDialog}
     </>);
 }
