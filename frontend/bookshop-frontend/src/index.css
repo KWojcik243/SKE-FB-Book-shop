@@ -1,0 +1,92 @@
+body {
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+}
+
+#root {
+  min-height: 100vh !important;
+}
+
+.btn-link {
+  color: var(--accent) !important;
+}
+
+.btn-link:active, .btn-link.active, .btn-link:hover, .btn-link:focus {
+  color: #17895d !important; 
+}
+
+.form-control:focus {
+  border-color: var(--accent) !important;
+  border-width: 2px;
+  box-shadow: inset 0px 0px 0px 1px var(--accent) !important;
+}
+
+.form-outline .form-control:focus~.form-label {
+  color: var(--accent) !important;
+}
+
+.form-outline .form-control:focus~.form-notch .form-notch-leading,
+.form-outline .form-control:focus~.form-notch .form-notch-trailing {
+  border-color: var(--accent) !important;
+  border-width: 2px !important;
+}
+
+.form-outline .form-control:focus~.form-notch .form-notch-middle {
+  border-bottom-color: var(--accent) !important;
+  border-bottom-width: 2px !important;
+}
+
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.form-check-input[type=radio]:checked:after {
+  border-color: var(--accent);
+  background-color: var(--accent);
+}
+
+.form-check-input:checked,
+.form-check-input:checked:focus {
+  border-color: var(--accent);
+}
+
+@media (max-width: 991.98px) {
+  .sidebar {
+    width: auto !important;
+  }
+}
+
+.list-group-item.active {
+  background-color: #d0f3e1;
+  color: #17895d;
+  border-color: #d0f3e1;
+}
+
+*::-webkit-scrollbar {
+  background-color: #fff;
+  width: 16px;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: #fff;
+}
+
+*::-webkit-scrollbar-track:hover {
+  background-color: #f4f4f4
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #babac0;
+  border-radius: 16px;
+  border: 5px solid #fff;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #a0a0a5;
+  border: 4px solid #f4f4f4;
+}
+
+*::-webkit-scrollbar-button {
+  display: none;
+}
