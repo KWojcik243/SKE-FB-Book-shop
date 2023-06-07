@@ -34,6 +34,9 @@ function App() {
             <Route path='/basket' element={ <BasketPage /> }></Route>
             <Route path='/orders' element={ <OrdersPage /> }></Route>
             <Route path='/dashboard' element={ <DashboardPage /> }></Route>
+            <Route path='/dashboard/books' element={ <DashboardPage /> }></Route>
+            <Route path='/dashboard/orders' element={ <DashboardPage /> }></Route>
+            <Route path='/dashboard/users' element={ <DashboardPage /> }></Route>
           </Routes>
         </div>
         <Footer />

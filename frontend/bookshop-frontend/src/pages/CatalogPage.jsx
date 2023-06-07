@@ -19,14 +19,10 @@ export default function CatalogPage() {
     const bookCards = <MDBRow className='row-cols-1 row-cols-md-2 g-4 mt-3'>
         {bookList.filter((item) => {
             return search.trim() === '' ? item : (item.title + item.author + item.category).toLowerCase().includes(search.trim())
-        }).map((book) => <>
-            <MDBCol>
-                <MDBCard className='h-100'>
-                    <MDBCardImage
-                        src={book.cover}
-                        alt={book.title}
-                        position='top'
-                    />
+        }).map((book, i) => <>
+            <MDBCol key={i}>
+                <MDBCard className='h-100' key={i}>
+                    <MDBCardImage src={book.cover} alt={book.title} position='top' />
                     <MDBCardBody>
                         <MDBCardTitle>{book.title}</MDBCardTitle>
                         <MDBCardText className='mb-1'>
