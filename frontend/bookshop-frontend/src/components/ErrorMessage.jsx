@@ -13,8 +13,8 @@ export function showErrorMessage(message) {
 
 export default function ErrorMessage() {
     return (<>
-        <div className="toast-container position-fixed bottom-0 end-0 p-3">
-            <div id="liveToastError" className="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="8000">
+        <div className="toast-container position-fixed bottom-0 end-0 p-3" style={{zIndex: "99999999999"}}>
+            <div id="liveToastError" className="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="8000" >
                 <div className="toast-header">
                     <strong className="me-auto">Błąd</strong>
                     <small id="liveToastErrorTime">X</small>

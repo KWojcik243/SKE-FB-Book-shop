@@ -3,6 +3,8 @@ import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import DashboardBooks from "../components/DashboardBooks";
 import DashboardOrders from "../components/DashboardOrders";
 import DashboardUsers from "../components/DashboardUsers";
+import DashboardAuthors from "../components/DashboardAuthors.jsx";
+import DashboardCategories from "../components/DashboardCategories.jsx";
 
 export default function DashboardPage() {
     const location = useLocation();
@@ -19,10 +21,20 @@ export default function DashboardPage() {
         <MDBContainer className='my-5'>
             <MDBRow>
                 <MDBCol md='4' className="mb-3">
-                    <MDBListGroup style={{ minWidth: '22rem' }} light>
+                    <MDBListGroup light>
                         <Link to='/dashboard/books'>
                             <MDBListGroupItem tag='button' action noBorders active={location.pathname.includes('/books')} type='button' className='px-3'>
                                 <MDBIcon fas icon="book" className="me-2" />Książki
+                            </MDBListGroupItem>
+                        </Link>
+                        <Link to='/dashboard/authors'>
+                            <MDBListGroupItem tag='button' action noBorders active={location.pathname.includes('/authors')} type='button' className='px-3'>
+                                <MDBIcon fas icon="users" className="me-2" />Autorzy
+                            </MDBListGroupItem>
+                        </Link>
+                        <Link to='/dashboard/categories'>
+                            <MDBListGroupItem tag='button' action noBorders active={location.pathname.includes('/categories')} type='button' className='px-3'>
+                                <MDBIcon fas icon="swatchbook" className="me-2" />Kategorie
                             </MDBListGroupItem>
                         </Link>
                         <Link to='/dashboard/orders'>
@@ -39,6 +51,8 @@ export default function DashboardPage() {
                 </MDBCol>
                 <MDBCol md='8'>
                     {location.pathname.includes('/books') && <DashboardBooks />}
+                    {location.pathname.includes('/authors') && <DashboardAuthors />}
+                    {location.pathname.includes('/categories') && <DashboardCategories />}
                     {location.pathname.includes('/orders') && <DashboardOrders />}
                     {location.pathname.includes('/users') && <DashboardUsers />}
                 </MDBCol>
