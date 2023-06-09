@@ -61,9 +61,4 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book with id " + bookId + " not found.");
         }
     }
-
-    @GetMapping("/by-author/{authorId}")
-    public List<Book> getBooksByAuthor(@PathVariable int authorId) {
-        return bookService.getBooksByAuthorId(authorId);
-    }
 }
