@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -25,6 +26,12 @@ public class Order {
 
     @Column(name = "last_status_update")
     private Timestamp lastStatusUpdate;
+    @PrePersist
+    public void prePersist() {
+        if (lastStatusUpdate == null) {
+            lastStatusUpdate = Timestamp.from(Instant.now());
+        }
+    }
 
     @Column(name = "status")
     private String status;

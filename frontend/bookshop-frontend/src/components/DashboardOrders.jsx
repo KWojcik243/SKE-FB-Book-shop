@@ -26,8 +26,7 @@ export default function DashboardOrders() {
     };
 
     const [statusDialogVisible, setStatusDialogVisible] = useState(false);
-    const [activeStatusValue, setActiveStatusValue] = useState('');
-    const [activeOrderId, setActiveOrderId] = useState(0);
+    const [activeOrder, setActiveOrder] = useState({});
 
     const toggleStatusDialog = () => setStatusDialogVisible(!statusDialogVisible);
 
@@ -35,12 +34,18 @@ export default function DashboardOrders() {
         toggleStatusDialog();
 
         try {
-            const response = await axios.put(`http://localhost:8080/orders/${activeOrderId}`, {orderId: activeOrderId, newStatus: activeStatusValue});
+            const response = await axios.put(`http://localhost:8080/orders/${activeOrder.id}`, activeOrder, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
             setOrders(response.data);
+            window.location.reload();
         } catch (error) {
             showErrorMessage('Wystąpił błąd podczas wysyłania danych do serwera: ' + error);
         }
     };
+
 
     const statusDialog = <>
         <MDBModal show={statusDialogVisible} setShow={setStatusDialogVisible} tabIndex='-1'>
@@ -52,7 +57,7 @@ export default function DashboardOrders() {
                     </MDBModalHeader>
                     <MDBModalBody>
                         <p>Zmień status zamówienia:</p>
-                        <input className='form-control' type='text' value={activeStatusValue} onChange={(e) => setActiveStatusValue(e.target.value)} />
+                        <input className='form-control' type='text' value={activeOrder.status} onChange={(e) => setActiveOrder({...activeOrder, status: e.target.value}) } />
                     </MDBModalBody>
 
                     <MDBModalFooter>
@@ -64,9 +69,8 @@ export default function DashboardOrders() {
         </MDBModal>
     </>;
 
-    const changeStatus = (status, id) => {
-        setActiveStatusValue(status);
-        setActiveOrderId(id);
+    const changeStatus = (order) => {
+        setActiveOrder(order);
         toggleStatusDialog();
     }
 
@@ -80,18 +84,21 @@ export default function DashboardOrders() {
                     <tr>
                         <th scope='col'>Numer</th>
                         <th scope='col'>Użytkownik</th>
+                        <th scope='col'>Ostatnia aktualizacja</th>
                         <th scope='col'>Status</th>
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody>
                     {orders.filter((item) => {
-                        return search.trim() === '' ? item : (item.id + item.user).toLowerCase().includes(search.trim());
+                        const user = item.user ? item.user.name + " " + item.user.surname : "";
+                        return search.trim() === '' ? item : (item.id + user + item.status).toLowerCase().includes(search.trim());
                     }).map((order, i) => {
                         return (<tr key={i}>
                             <td>{order.id}</td>
-                            <td>{order.user}</td>
+                            <td>{order.user && order.user.name + " " + order.user.surname}</td>
+                            <td>{(new Date(order.lastStatusUpdate)).toLocaleString()}</td>
                             <td className="text-center">
-                                <MDBBtn outline rounded color='success' size='sm' className="m-1" onClick={() => changeStatus(order.status, order.id)}><MDBIcon fas icon="exchange-alt" className='me-2' />Zmień</MDBBtn>
+                                <MDBBtn outline rounded color='success' size='sm' className="m-1" onClick={() => changeStatus(order)}><MDBIcon fas icon="exchange-alt" className='me-2' />Zmień</MDBBtn>
                             </td>
                         </tr>);
                     })}
