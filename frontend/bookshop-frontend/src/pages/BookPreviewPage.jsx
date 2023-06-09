@@ -1,29 +1,43 @@
 import { Rating } from '@smastrom/react-rating';
 import { MDBBtn, MDBBtnGroup, MDBCard, MDBCardBody, MDBCardImage, MDBCardText, MDBCardTitle, MDBCol, MDBContainer, MDBIcon, MDBRow, MDBTabs, MDBTabsContent, MDBTabsItem, MDBTabsLink, MDBTabsPane } from 'mdb-react-ui-kit';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import {useEffect, useState} from 'react';
+import {Link, Navigate, useSearchParams} from 'react-router-dom';
+import axios from "axios";
+import {showErrorMessage} from "../components/ErrorMessage.jsx";
 
 
 export default function BookPreviewPage() {
+    const [searchParams, setSearchParams] = useSearchParams();
     const [tabsActive, setTabsActive] = useState('general');
+    const [book, setBook] = useState({});
+    const [bookFound, setBookFound] = useState(true);
+
+    const userData = { name: "X", isadmin: false };
 
     const handleTabsClick = (value) => {
-        if (value == tabsActive) return;
+        if (value === tabsActive) return;
         setTabsActive(value);
     }
 
-    const book = {
-        id: 0,
-        title: "Pan Tadeusz",
-        rating: 5,
-        author: "Adam Mickiewicz", // list joined by commas
-        category: "literatura polska",
-        cover: "https://cdn.pixabay.com/photo/2015/01/24/14/03/book-610189_1280.jpg",
-        agegroup: 12,
-        amount: 10,
-        isbn: "12021-1221-12"
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/books/' + searchParams.get('id'));
+            setBook(response.data);
+            setBookFound(true);
+        } catch (error) {
+            setBookFound(false);
+            showErrorMessage('Błąd podczas pobierania danych z serwera: ' + error);
+        }
     };
-    const userData = { name: "X", isadmin: false };
+
+    if (!bookFound)
+        return <Navigate to='/catalog'></Navigate>;
+
+    const authors = book.authors ? book.authors.map((author) => author.name + " " + author.surname).join(', ') : "";
 
     return (<>
         <MDBContainer className='my-5'>
@@ -35,7 +49,7 @@ export default function BookPreviewPage() {
                     <MDBCard>
                         <MDBRow className='g-0'>
                             <MDBCol md='4'>
-                                <MDBCardImage src={book.cover} alt='...' fluid />
+                                <MDBCardImage src={book.pngPath} alt='...' fluid />
                             </MDBCol>
                             <MDBCol md='8'>
                                 <MDBCardBody>
@@ -56,7 +70,7 @@ export default function BookPreviewPage() {
 
                                         <MDBTabsContent>
                                             <MDBTabsPane show={tabsActive === 'general'}>
-                                                <strong>Autor: </strong>{book.author}<br></br>
+                                                <strong>Autorzy: </strong>{authors}<br></br>
 
                                                 <div className='w-100 d-flex justify-content-start my-3'>
                                                     <span><strong>Ocena:&nbsp;</strong></span>
@@ -65,7 +79,7 @@ export default function BookPreviewPage() {
                                                     </div>
                                                 </div>
 
-                                                <strong>Grupa wiekowa: </strong>{book.agegroup}<br></br>
+                                                <strong>Grupa wiekowa: </strong>{book.ageGroup}<br></br>
                                                 <strong>Kategoria: </strong>{book.category}<br></br>
 
                                             </MDBTabsPane>

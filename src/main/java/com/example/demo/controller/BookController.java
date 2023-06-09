@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.BookDTO;
 import com.example.demo.entity.Book;
 import com.example.demo.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,23 +37,22 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addBook(@RequestParam String title,
-                                          @RequestParam String pngPath,
-                                          @RequestParam int ageGroup,
-                                          @RequestParam float rating,
-                                          @RequestParam long isbn,
-                                          @RequestParam int amount,
-                                          @RequestParam List<Integer> authorIds,
-                                          @RequestParam int categoryId) {
-        if (bookService.existsByTitle(title)) {
-            return ResponseEntity.badRequest().body("Book with title " + title + " already exists.");
+    public ResponseEntity<String> addBook(BookDTO bookDTO) {
+        if (bookService.existsByTitle(bookDTO.getTitle())) {
+            return ResponseEntity.badRequest().body("Book with title " + bookDTO.getTitle() + " already exists.");
         }
 
-        bookService.addBook(title, pngPath, ageGroup, rating, isbn, amount, authorIds, categoryId);
-        return ResponseEntity.ok().body("Book " + title + " added successfully.");
+        bookService.addBook(bookDTO);
+        return ResponseEntity.ok().body("Book " + bookDTO.getTitle() + " added successfully.");
     }
 
-    @DeleteMapping("/delete/{bookId}")
+    @PutMapping("/{bookId}")
+    public ResponseEntity<String> editBook(@PathVariable int bookId, BookDTO bookDTO) {
+        bookService.editBook(bookId, bookDTO);
+        return ResponseEntity.ok().body("Book " + bookDTO.getTitle() + " edited successfully.");
+    }
+
+    @DeleteMapping("/{bookId}")
     public ResponseEntity<String> deleteBook(@PathVariable int bookId) {
         boolean removed = bookService.deleteBook(bookId);
         if (removed) {

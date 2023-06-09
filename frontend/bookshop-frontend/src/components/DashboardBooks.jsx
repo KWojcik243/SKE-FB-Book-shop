@@ -1,35 +1,45 @@
 import { MDBBadge, MDBBtn, MDBBtnGroup, MDBIcon, MDBInputGroup, MDBModal, MDBModalBody, MDBModalContent, MDBModalDialog, MDBModalFooter, MDBModalHeader, MDBModalTitle, MDBTable, MDBTableBody, MDBTableHead } from "mdb-react-ui-kit";
-import { useState } from "react";
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {showErrorMessage} from "./ErrorMessage.jsx";
 
 
 export default function DashboardBooks() {
     const [search, setSearch] = useState('');
-
-    const books = [{
-        id: 1,
-        title: "Pan Tadeusz",
-        rating: 5,
-        author: "Adam Mickiewicz",
-        category: "literatura polska",
-        cover: "https://cdn.pixabay.com/photo/2015/01/24/14/03/book-610189_1280.jpg",
-        agegroup: 12,
-        amount: 10,
-        isbn: "12021-1221-12"
-    }];
 
     const [activeBookId, setActiveBookId] = useState(0);
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
     const [modifyDialogVisible, setModifyDialogVisible] = useState(false);
     const [modifyDialogEdit, setModifyDialogEdit] = useState(false);
     const [modifyData, setModifyData] = useState({});
+    const [bookList, setBookList] = useState([]);
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/books');
+            setBookList(response.data);
+        } catch (error) {
+            showErrorMessage('Błąd podczas pobierania danych z serwera: ' + error);
+        }
+    };
 
     const toggleDeleteDialog = () => setDeleteDialogVisible(!deleteDialogVisible);
     const toggleModifyDialog = () => setModifyDialogVisible(!modifyDialogVisible);
 
-    const deleteBook = () => {
-        //activeBookId...
-
+    const deleteBook = async () => {
         toggleDeleteDialog();
+
+        try {
+            const response = await axios.delete(`http://localhost:8080/books/${activeBookId}`);
+            setBookList(response.data);
+            window.location.reload();
+        } catch (error) {
+            showErrorMessage('Błąd podczas usuwania książki: ' + error);
+        }
     };
 
     const addBook = () => {
@@ -71,7 +81,9 @@ export default function DashboardBooks() {
                         <MDBModalTitle>Książka</MDBModalTitle>
                         <MDBBtn className='btn-close' color='none' onClick={toggleModifyDialog}></MDBBtn>
                     </MDBModalHeader>
-                    <MDBModalBody>XXX</MDBModalBody>
+                    <MDBModalBody>
+
+                    </MDBModalBody>
 
                     <MDBModalFooter>
                         <MDBBtn color='link' onClick={toggleModifyDialog}>Anuluj</MDBBtn>
@@ -118,15 +130,17 @@ export default function DashboardBooks() {
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                    {books.filter((item) => {
-                        return search.trim() === '' ? item : (item.title + item.author + item.category + item.isbn).toLowerCase().includes(search.trim());
+                    {bookList.filter((item) => {
+                        const authors = item.authors ? item.authors.map((author) => author.name + " " + author.surname).join(', ') : "";
+                        return search.trim() === '' ? item : (item.title + authors + item.category + item.isbn).toLowerCase().includes(search.trim());
                     }).map((book, i) => {
+                        const authors = book.authors ? book.authors.map((author) => author.name + " " + author.surname).join(', ') : "";
                         return (<tr key={i}>
                             <td>
                                 <p className='fw-bold mb-1'>{book.title}</p>
                             </td>
                             <td>
-                                <p className='fw-normal mb-1'>{book.author}</p>
+                                <p className='fw-normal mb-1'>{authors}</p>
                             </td>
                             <td>{book.category}</td>
                             <td>{book.isbn}</td>
