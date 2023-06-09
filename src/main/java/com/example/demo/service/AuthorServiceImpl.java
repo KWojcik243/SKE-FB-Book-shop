@@ -1,11 +1,11 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.AuthorDTO;
 import com.example.demo.entity.Author;
 import com.example.demo.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
@@ -39,13 +39,17 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public boolean deleteAuthor(int authorId) {
-        Optional<Author> optionalAuthor = authorRepository.findById(authorId);
-        if (optionalAuthor.isPresent()) {
-            Author author = optionalAuthor.get();
-            authorRepository.delete(author);
+        if (authorRepository.existsById(authorId)) {
+            authorRepository.deleteById(authorId);
             return true;
-        }
-        return false;
+        } else return false;
     }
 
+    @Override
+    public boolean updateAuthor(int authorId, AuthorDTO authorDTO) {
+        if (authorRepository.existsById(authorId)) {
+            authorRepository.deleteById(authorId);
+            return true;
+        } else return false;
+    }
 }
