@@ -17,6 +17,7 @@ import BasketPage from './pages/BasketPage';
 import OrdersPage from './pages/OrdersPage';
 import DashboardPage from './pages/DashboardPage';
 import ErrorMessage from './components/ErrorMessage';
+import { RequireAuth } from "react-auth-kit";
 
 function App() {
   return (
@@ -32,7 +33,7 @@ function App() {
             <Route path='/register' element={ <RegisterPage /> }></Route>
             <Route path='/catalog' element={ <CatalogPage /> }></Route>
             <Route path='/preview' element={ <BookPreviewPage /> }></Route>
-            <Route path='/basket' element={ <BasketPage /> }></Route>
+            <Route path='/basket' element={ <RequireAuth loginPath='/login'> <BasketPage /> </RequireAuth> }></Route>
             <Route path='/orders' element={ <OrdersPage /> }></Route>
             <Route path='/dashboard' element={ <DashboardPage /> }></Route>
             <Route path='/dashboard/books' element={ <DashboardPage /> }></Route>

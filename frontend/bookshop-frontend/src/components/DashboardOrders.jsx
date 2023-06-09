@@ -4,12 +4,14 @@ import axios from 'axios';
 import { showErrorMessage } from "./ErrorMessage";
 
 export default function DashboardOrders() {
-    const [search, setSearch] = useState('');
-    const [orders, setOrders] = useState([]);
+    const ordersTest = [
+        { id: 0, user: "X XXX", status: "1" },
+        { id: 10, user: "Xcff XXX", status: "2" },
+    ];
 
-    useEffect(() => {
-        changeActiveStatusData();
-    }, []);
+    const [search, setSearch] = useState('');
+    const [orders, setOrders] = useState(ordersTest);
+
     useEffect(() => {
         fetchData();
     }, []);
@@ -23,24 +25,21 @@ export default function DashboardOrders() {
         }
     };
 
-    // const orders = [
-    //     { id: 0, user: "X XXX", status: "1" },
-    //     { id: 10, user: "Xcff XXX", status: "2" },
-    // ];
-
     const [statusDialogVisible, setStatusDialogVisible] = useState(false);
     const [activeStatusValue, setActiveStatusValue] = useState('');
     const [activeOrderId, setActiveOrderId] = useState(0);
 
     const toggleStatusDialog = () => setStatusDialogVisible(!statusDialogVisible);
 
-    const changeActiveStatusData = async () => {
-
-    };
-
     const changeActiveStatus = async () => {
-        await changeActiveStatusData();
         toggleStatusDialog();
+
+        try {
+            const response = await axios.put(`http://localhost:8080/orders/${activeOrderId}`, {orderId: activeOrderId, newStatus: activeStatusValue});
+            setOrders(response.data);
+        } catch (error) {
+            showErrorMessage('Wystąpił błąd podczas wysyłania danych do serwera: ' + error);
+        }
     };
 
     const statusDialog = <>

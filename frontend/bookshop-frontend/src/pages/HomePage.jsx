@@ -11,15 +11,15 @@ export default function HomePage() {
             <div id="mainpanel">
                 <p>SKE Księgarnia</p>
                 <hr style={{ width: "100px" }} className="mx-auto"></hr>
-                <p><span style={{ fontSize: "0.8em", marginLeft: "-10px" }}>Nie czekaj! Sięgnij po nasze książki...</span>
+                <div><span style={{ fontSize: "0.8em", marginLeft: "-10px" }}>Nie czekaj! Sięgnij po nasze książki...</span>
                     <br></br>
-                    <span style={{ fontSize: "0.8em", fontVariantCaps: "all-petite-caps" }}><div class="dropping-texts">
+                    <span style={{ fontSize: "0.8em", fontVariantCaps: "all-petite-caps" }}><div className="dropping-texts">
                         <div>mrożące krew w żyłach</div>
                         <div>popularno-naukowe</div>
                         <div>historyczne z nutą romansu</div>
                         <div>i stwórz swoją własną bibliotekę!</div>
                     </div></span>
-                </p>
+                </div>
                 <NavLink to="/catalog">
                     <MDBBtn outline rounded color='light' style={{ fontSize: "15px" }}>Otwórz katalog &gt;&gt;</MDBBtn>
                 </NavLink>

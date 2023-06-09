@@ -11,7 +11,7 @@ export default function ContactPage() {
 
                     <h3 className='mb-3'>Skład zespołu:</h3>
                     <MDBCard className='mb-5'>
-                        <MDBListGroup flush>
+                        <MDBListGroup>
                             <MDBListGroupItem>
                                 <img src="https://avatars.githubusercontent.com/u/63014344?v=4" className='img-fluid rounded-circle me-2' style={{width: "24px", height: "24px"}}></img> Kacper Wójcik
                             </MDBListGroupItem>
