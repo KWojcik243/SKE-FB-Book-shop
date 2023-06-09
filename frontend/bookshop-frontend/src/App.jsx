@@ -16,6 +16,7 @@ import BookPreviewPage from './pages/BookPreviewPage';
 import BasketPage from './pages/BasketPage';
 import OrdersPage from './pages/OrdersPage';
 import DashboardPage from './pages/DashboardPage';
+import ErrorMessage from './components/ErrorMessage';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
             <Route path='/dashboard/orders' element={ <DashboardPage /> }></Route>
             <Route path='/dashboard/users' element={ <DashboardPage /> }></Route>
           </Routes>
+          <ErrorMessage />
         </div>
         <Footer />
       </div>

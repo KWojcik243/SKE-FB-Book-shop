@@ -1,4 +1,4 @@
-import { MDBBadge, MDBBtn, MDBIcon, MDBInputGroup, MDBModal, MDBModalBody, MDBModalContent, MDBModalDialog, MDBModalFooter, MDBModalHeader, MDBModalTitle, MDBTable, MDBTableBody, MDBTableHead } from "mdb-react-ui-kit";
+import { MDBBadge, MDBBtn, MDBBtnGroup, MDBIcon, MDBInputGroup, MDBModal, MDBModalBody, MDBModalContent, MDBModalDialog, MDBModalFooter, MDBModalHeader, MDBModalTitle, MDBTable, MDBTableBody, MDBTableHead } from "mdb-react-ui-kit";
 import { useState } from "react";
 
 
@@ -99,9 +99,11 @@ export default function DashboardBooks() {
 
     return (<>
         <div className="mb-3">
-            <MDBInputGroup className='mb-3' textTag='div' noBorder textBefore={<MDBBtn color="dark" size="lg" onClick={() => showModifyDialog(false)}><MDBIcon fas icon="plus-circle" className="me-2" />Dodaj książkę</MDBBtn>}>
-                <input className='form-control' type='text' placeholder="Szukaj książki..." onChange={(e) => setSearch(e.target.value.toLowerCase())} />
-            </MDBInputGroup>
+            <input className='form-control mb-3' type='text' placeholder="Szukaj książki..." onChange={(e) => setSearch(e.target.value.toLowerCase())} />
+
+            <MDBBtnGroup>
+                <MDBBtn color="dark" onClick={() => showModifyDialog(false)}><MDBIcon fas icon="plus-circle" className="me-2" />Dodaj książkę</MDBBtn>
+            </MDBBtnGroup>
         </div>
 
         <div className="table-responsive">

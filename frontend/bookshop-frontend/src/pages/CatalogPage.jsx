@@ -3,8 +3,9 @@ import { MDBBtn, MDBBtnGroup, MDBCard, MDBCardBody, MDBCardFooter, MDBCardImage,
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { showErrorMessage } from '../components/ErrorMessage';
 
-export default function CatalogPage() {
+export default function CatalogPage() {  
     const [search, setSearch] = useState('');
 
     const userData = { name: "X", isadmin: false };
@@ -20,11 +21,9 @@ export default function CatalogPage() {
             const response = await axios.get('http://localhost:8080/books');
             setBookList(response.data);
         } catch (error) {
-            console.error('Błąd podczas pobierania danych z serwera', error);
+            showErrorMessage('Błąd podczas pobierania danych z serwera: ' + error);
         }
     };
-
-    console.log(bookList);
 
     const bookCards = <MDBRow className='row-cols-1 row-cols-md-2 g-4 mt-3'>
         {bookList.filter((item) => {
