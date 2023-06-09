@@ -65,6 +65,10 @@ public class Book {
         this.amount += nAmount;
     }
 
+    public void removeAuthor(Author author){
+        this.authors.remove(author);
+    }
+
     @JsonProperty("category")
     public String getCategoryName() {
         if (category != null) {
