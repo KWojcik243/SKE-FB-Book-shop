@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.BookCategoryDTO;
 import com.example.demo.entity.BookCategory;
 import com.example.demo.service.BookCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +34,23 @@ public class BookCategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<BookCategory> addCategory(@RequestParam String category) {
-        BookCategory newCategory = categoryService.addCategory(category);
+    public ResponseEntity<BookCategory> addCategory(@RequestBody BookCategoryDTO bookCategoryDTO) {
+        BookCategory newCategory = categoryService.addCategory(bookCategoryDTO);
         return ResponseEntity.ok(newCategory);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @PutMapping("/{id}")
+    public ResponseEntity<String> editCategory(@PathVariable int id, @RequestBody BookCategoryDTO bookCategoryDTO) {
+        boolean updated = categoryService.updateCategory(id, bookCategoryDTO);
+        if (updated) {
+            return ResponseEntity.ok("Category with ID " + id + " has been updated.");
+        } else {
+            return ResponseEntity.badRequest().body("Unable to update category with ID " + id + ".");
+        }
+    }
+
+
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCategory(@PathVariable int id) {
         categoryService.deleteCategory(id);
         return ResponseEntity.ok("Category with id " + id + " deleted.");
