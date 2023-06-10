@@ -61,8 +61,12 @@ public class Book {
         this.amount = amount;
     }
 
-    public void updateAmountBy(int nAmount){
+    public boolean updateAmountBy(int nAmount){
+        if(this.amount + nAmount < 0){
+            return false;
+        }
         this.amount += nAmount;
+        return true;
     }
 
     public void removeAuthor(Author author){

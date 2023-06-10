@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +9,7 @@ import lombok.ToString;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,6 +29,7 @@ public class Order {
 
     @Column(name = "last_status_update")
     private Timestamp lastStatusUpdate;
+
     @PrePersist
     public void prePersist() {
         if (lastStatusUpdate == null) {
@@ -48,6 +52,9 @@ public class Order {
     @Column(name = "post_code")
     private String postCode;
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItems = new ArrayList<>();
+
     public Order() {}
 
     public Order(Timestamp lastStatusUpdate, String status, int paymentType, String address, String city, String postCode) {
@@ -57,5 +64,15 @@ public class Order {
         this.address = address;
         this.city = city;
         this.postCode = postCode;
+    }
+
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+        orderItem.setOrder(this);
+    }
+
+    public void removeOrderItem(OrderItem orderItem) {
+        orderItems.remove(orderItem);
+        orderItem.setOrder(null);
     }
 }
