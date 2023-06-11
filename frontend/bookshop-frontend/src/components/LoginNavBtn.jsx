@@ -11,11 +11,11 @@ export default function LoginNavBtn() {
 
         return (<>
             <MDBDropdown className='btn-group' >
-                <MDBBtn className='bg-success btn-success' style={{paddingInline: "15px", pointerEvents: "none"}} ><MDBIcon far icon="user-circle" className='me-2' />{user.name + " " + user.surname}</MDBBtn>
+                <MDBBtn className='bg-success btn-success' style={{paddingInline: "15px", pointerEvents: "none"}} ><MDBIcon far icon="user-circle" className='me-2' />{user.email}</MDBBtn>
                 <MDBDropdownToggle split className='btn-success' style={{paddingInline: "15px"}}></MDBDropdownToggle>
                 <MDBDropdownMenu>
                     {isAdmin ? <></> : <li><NavLink to="/basket" className='dropdown-item'><MDBIcon fas icon="shopping-basket" className='me-3' />Koszyk</NavLink></li>}
-                    <li><NavLink to={isAdmin ? "/dashboard" : "/orders"} className='dropdown-item'><MDBIcon fas icon={isadmin ? "tools" : "th-list"}  className='me-3' />{isAdmin ? "Panel administratora" : "Zamówienia"}</NavLink></li>
+                    <li><NavLink to={isAdmin ? "/dashboard" : "/orders"} className='dropdown-item'><MDBIcon fas icon={isAdmin ? "tools" : "th-list"}  className='me-3' />{isAdmin ? "Panel administratora" : "Zamówienia"}</NavLink></li>
                     <li><NavLink to="/logout" className='dropdown-item'><MDBIcon fas icon="sign-out-alt"  className='me-3' />Wyloguj się</NavLink></li>
                 </MDBDropdownMenu>
             </MDBDropdown>

@@ -18,7 +18,10 @@ export default function CatalogPage() {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/books');
+            const response = await axios.get('http://localhost:8080/books', {headers: {
+                    'Content-type':'application/json',
+                    'Authorization':'Bearer ' + localStorage.getItem('accessToken')
+                },});
             setBookList(response.data);
         } catch (error) {
             showErrorMessage('Błąd podczas pobierania danych z serwera: ' + error);

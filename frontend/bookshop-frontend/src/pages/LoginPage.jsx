@@ -17,7 +17,10 @@ export default function LoginPage() {
                 <MDBCol md='3'></MDBCol>
                 <MDBCol md='6'>
                     <h2 className='text-center mb-5'>Logowanie</h2>
-                    <form onSubmit={(e) => login(user, password)}>
+                    <form onSubmit={(e) => {
+                        e.preventDefault();
+                        login(email, password);
+                    }}>
                         <MDBRow className='g-2 justify-content-center'>
                             <MDBCol size="8" className="text-center mb-3">
                                 <MDBInput id="email" label="Adres email" className="my-2" value={email} onChange={e => setEmail(e.target.value)} />
