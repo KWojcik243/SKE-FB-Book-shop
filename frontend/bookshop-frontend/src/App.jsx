@@ -39,6 +39,8 @@ function App() {
             <Route path='/dashboard/books' element={ <DashboardPage /> }></Route>
             <Route path='/dashboard/orders' element={ <DashboardPage /> }></Route>
             <Route path='/dashboard/users' element={ <DashboardPage /> }></Route>
+            <Route path='/dashboard/authors' element={ <DashboardPage /> }></Route>
+            <Route path='/dashboard/categories' element={ <DashboardPage /> }></Route>
           </Routes>
           <ErrorMessage />
         </div>

@@ -37,7 +37,7 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addBook(BookDTO bookDTO) {
+    public ResponseEntity<String> addBook(@RequestBody BookDTO bookDTO) {
         if (bookService.existsByTitle(bookDTO.getTitle())) {
             return ResponseEntity.badRequest().body("Book with title " + bookDTO.getTitle() + " already exists.");
         }
@@ -47,7 +47,7 @@ public class BookController {
     }
 
     @PutMapping("/{bookId}")
-    public ResponseEntity<String> editBook(@PathVariable int bookId, BookDTO bookDTO) {
+    public ResponseEntity<String> editBook(@PathVariable int bookId, @RequestBody BookDTO bookDTO) {
         bookService.editBook(bookId, bookDTO);
         return ResponseEntity.ok().body("Book " + bookDTO.getTitle() + " edited successfully.");
     }

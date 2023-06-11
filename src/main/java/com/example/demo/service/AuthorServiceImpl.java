@@ -1,18 +1,22 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.AuthorDTO;
 import com.example.demo.entity.Author;
+import com.example.demo.entity.Book;
 import com.example.demo.repository.AuthorRepository;
+import com.example.demo.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
+    private final BookRepository bookRepository;
 
-    public AuthorServiceImpl(AuthorRepository authorRepository) {
+    public AuthorServiceImpl(AuthorRepository authorRepository, BookRepository bookRepository) {
         this.authorRepository = authorRepository;
+        this.bookRepository = bookRepository;
     }
 
 
@@ -39,13 +43,29 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public boolean deleteAuthor(int authorId) {
-        Optional<Author> optionalAuthor = authorRepository.findById(authorId);
-        if (optionalAuthor.isPresent()) {
-            Author author = optionalAuthor.get();
+        if (authorRepository.existsById(authorId)) {
+
+            // Remove author from his books
+            List<Book> thisAuthorBooks = authorRepository.getReferenceById(authorId).getBooks();
+            Author author = authorRepository.getReferenceById(authorId);
+            for(Book book: thisAuthorBooks){
+                book.removeAuthor(author);
+                bookRepository.save(book);
+            }
+            // Remove author
             authorRepository.delete(author);
             return true;
-        }
-        return false;
+        } else return false;
     }
 
+    @Override
+    public boolean updateAuthor(int authorId, AuthorDTO authorDTO) {
+        if (authorRepository.existsById(authorId)) {
+            Author author = authorRepository.getReferenceById(authorId);
+            author.setName(authorDTO.getName());
+            author.setSurname(authorDTO.getSurname());
+            authorRepository.save(author);
+            return true;
+        } else return false;
+    }
 }

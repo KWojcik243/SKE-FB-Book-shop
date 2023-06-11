@@ -1,14 +1,20 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.OrderDTO;
+import com.example.demo.dto.OrderItemDTO;
 import com.example.demo.entity.Order;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 public interface OrderService {
     public List<Order> getOrdersByUserId(int id);
-    public void addOrder(Timestamp lastStatusUpdate, String status, int paymentType, String address, String city, String postCode);
+    public void addOrder(OrderDTO orderDTO);
+
+    public List<Order> getAllOrders();
 
     public void deleteOrder(int orderId);
-    public void updateOrderStatus(int orderId, String status);
+    public boolean updateOrder(int orderId, OrderDTO orderItemDTO);
+    public boolean updateItemInOrder(int orderId, OrderItemDTO orderItemDTO);
+
+    public Order getOrderById(int orderId);
 }

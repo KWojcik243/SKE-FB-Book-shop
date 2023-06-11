@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.BookCategoryDTO;
 import com.example.demo.entity.BookCategory;
 import com.example.demo.repository.BookCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,19 @@ public class BookCategoryServiceImpl implements BookCategoryService {
     }
 
     @Override
-    public BookCategory addCategory(String category) {
-        BookCategory newCategory = new BookCategory(category);
+    public BookCategory addCategory(BookCategoryDTO bookCategoryDTO) {
+        BookCategory newCategory = new BookCategory(bookCategoryDTO.getCategory());
         return categoryRepository.save(newCategory);
+    }
+
+    @Override
+    public boolean updateCategory(int categoryId, BookCategoryDTO bookCategoryDTO) {
+        if(categoryRepository.existsById(categoryId)){
+            BookCategory bookCategory = categoryRepository.getReferenceById(categoryId);
+            bookCategory.setCategory(bookCategoryDTO.getCategory());
+            categoryRepository.save(bookCategory);
+            return true;
+        } else return false;
     }
 
     @Override

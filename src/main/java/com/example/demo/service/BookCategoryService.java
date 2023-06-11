@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.BookCategoryDTO;
 import com.example.demo.entity.BookCategory;
 
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.List;
 public interface BookCategoryService {
     List<BookCategory> getAllCategories();
     BookCategory getCategoryById(int id);
-    BookCategory addCategory(String category);
+    BookCategory addCategory(BookCategoryDTO bookCategoryDTO);
+    boolean updateCategory(int categoryId, BookCategoryDTO bookCategoryDTO);
     void deleteCategory(int id);
 }

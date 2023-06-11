@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
@@ -38,6 +39,13 @@ public class User implements UserDetails {
     @Column(name="role")
     @Enumerated(EnumType.STRING)
     private Role role;
+  
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "cart_id")
+    @JsonIgnore
+    private Cart cart;
+
+    public User() {}
 
     public User(String name, String surname, String email, String password, Role role) {
         this.name = name;
