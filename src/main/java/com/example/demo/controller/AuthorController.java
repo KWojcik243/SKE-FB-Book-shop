@@ -6,6 +6,7 @@ import com.example.demo.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class AuthorController {
         return authorService.getAuthors();
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping
     public ResponseEntity<String> addAuthor(@RequestParam String name, @RequestParam String surname) {
         if (authorService.existsByNameAndSurname(name, surname)) {
@@ -45,6 +47,7 @@ public class AuthorController {
         return ResponseEntity.ok().body("Author " + name + " " + surname + " added successfully.");
     }
 
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/{authorId}")
     public ResponseEntity<String> deleteAuthor(@PathVariable int authorId) {
         boolean removed = authorService.deleteAuthor(authorId);
@@ -55,6 +58,7 @@ public class AuthorController {
         }
     }
 
+    @Secured("ROLE_ADMIN")
     @PutMapping("/{authorId}")
     public ResponseEntity<String> updateAuthor(@PathVariable int authorId, @RequestBody AuthorDTO authorDTO){
         boolean updated = authorService.updateAuthor(authorId, authorDTO);

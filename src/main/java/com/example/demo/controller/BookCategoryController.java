@@ -5,6 +5,7 @@ import com.example.demo.entity.BookCategory;
 import com.example.demo.service.BookCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,12 +34,14 @@ public class BookCategoryController {
         return ResponseEntity.ok(category);
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping
     public ResponseEntity<BookCategory> addCategory(@RequestBody BookCategoryDTO bookCategoryDTO) {
         BookCategory newCategory = categoryService.addCategory(bookCategoryDTO);
         return ResponseEntity.ok(newCategory);
     }
 
+    @Secured("ROLE_ADMIN")
     @PutMapping("/{id}")
     public ResponseEntity<String> editCategory(@PathVariable int id, @RequestBody BookCategoryDTO bookCategoryDTO) {
         boolean updated = categoryService.updateCategory(id, bookCategoryDTO);
@@ -49,7 +52,7 @@ public class BookCategoryController {
         }
     }
 
-
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCategory(@PathVariable int id) {
         categoryService.deleteCategory(id);

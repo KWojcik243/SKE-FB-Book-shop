@@ -6,6 +6,7 @@ import com.example.demo.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class BookController {
         return bookService.getBooks();
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping
     public ResponseEntity<String> addBook(@RequestBody BookDTO bookDTO) {
         if (bookService.existsByTitle(bookDTO.getTitle())) {
@@ -46,12 +48,14 @@ public class BookController {
         return ResponseEntity.ok().body("Book " + bookDTO.getTitle() + " added successfully.");
     }
 
+    @Secured("ROLE_ADMIN")
     @PutMapping("/{bookId}")
     public ResponseEntity<String> editBook(@PathVariable int bookId, @RequestBody BookDTO bookDTO) {
         bookService.editBook(bookId, bookDTO);
         return ResponseEntity.ok().body("Book " + bookDTO.getTitle() + " edited successfully.");
     }
 
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/{bookId}")
     public ResponseEntity<String> deleteBook(@PathVariable int bookId) {
         boolean removed = bookService.deleteBook(bookId);

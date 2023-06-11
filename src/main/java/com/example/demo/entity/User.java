@@ -55,10 +55,6 @@ public class User implements UserDetails {
         this.role = role;
     }
 
-    public User() {
-    }
-
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
@@ -93,4 +89,17 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public boolean isAdmin(){
+        return this.role == Role.ADMIN;
+    }
+
+    public void grantAdminPrivileges(){
+        this.role = Role.ADMIN;
+    }
+
+    public void revokeAdminPrivileges(){
+        this.role = Role.USER;
+    }
+
 }
