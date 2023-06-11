@@ -4,13 +4,8 @@ import axios from 'axios';
 import { showErrorMessage } from "./ErrorMessage";
 
 export default function DashboardOrders() {
-    const ordersTest = [
-        { id: 0, user: "X XXX", status: "1" },
-        { id: 10, user: "Xcff XXX", status: "2" },
-    ];
-
     const [search, setSearch] = useState('');
-    const [orders, setOrders] = useState(ordersTest);
+    const [orders, setOrders] = useState([]);
 
     useEffect(() => {
         fetchData();

@@ -51,6 +51,11 @@ body {
   border-color: var(--accent);
 }
 
+.form-select:focus {
+  border-color: var(--accent);
+  box-shadow: inset 0px 0px 0px 1px var(--accent);
+}
+
 @media (max-width: 991.98px) {
   .sidebar {
     width: auto !important;

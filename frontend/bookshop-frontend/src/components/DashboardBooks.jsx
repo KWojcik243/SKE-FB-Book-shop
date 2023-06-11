@@ -16,10 +16,11 @@ import {
     MDBTableBody,
     MDBTableHead
 } from "mdb-react-ui-kit";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {showErrorMessage} from "./ErrorMessage.jsx";
-import {Rating} from "@smastrom/react-rating";
+import { showErrorMessage } from "./ErrorMessage.jsx";
+import { Rating } from "@smastrom/react-rating";
+import { MultiSelect } from "react-multi-select-component";
 
 
 export default function DashboardBooks() {
@@ -33,6 +34,8 @@ export default function DashboardBooks() {
     const [bookList, setBookList] = useState([]);
     const [categoryList, setCategoryList] = useState([]);
     const [authorList, setAuthorList] = useState([]);
+    const [authorsSelect, setAuthorsSelect] = useState([]);
+    const [authorsSelected, setAuthorsSelected] = useState([]);
 
     useEffect(() => {
         fetchData();
@@ -46,13 +49,26 @@ export default function DashboardBooks() {
             setCategoryList(response.data);
             response = await axios.get('http://localhost:8080/authors');
             setAuthorList(response.data);
+
+            let authors = [];
+            for (const author of authorList) {
+                authors.push({ label: author.name + " " + author.surname, value: author.id });
+            }
+            setAuthorsSelect(authors);
         } catch (error) {
             showErrorMessage('Błąd podczas pobierania danych z serwera: ' + error);
         }
     };
 
     const toggleDeleteDialog = () => setDeleteDialogVisible(!deleteDialogVisible);
-    const toggleModifyDialog = () => setModifyDialogVisible(!modifyDialogVisible);
+    const toggleModifyDialog = () => {
+        setModifyDialogVisible(!modifyDialogVisible);
+
+        const stars = document.getElementById('book-rating').getElementsByClassName('rr--svg');
+        for (const star of stars) {
+            star.setAttribute('viewBox', '-1 -1 27 25.81');
+        }
+    }
 
     const deleteBook = async () => {
         toggleDeleteDialog();
@@ -98,25 +114,55 @@ export default function DashboardBooks() {
     </>;
 
     const modifyDialog = <>
-        <MDBModal show={modifyDialogVisible} setShow={setModifyDialogVisible} tabIndex='-1'>
-            <MDBModalDialog>
+        <MDBModal staticBackdrop show={modifyDialogVisible} setShow={setModifyDialogVisible} tabIndex='-1'>
+            <MDBModalDialog centered>
                 <MDBModalContent>
                     <MDBModalHeader>
                         <MDBModalTitle>Książka</MDBModalTitle>
                         <MDBBtn className='btn-close' color='none' onClick={toggleModifyDialog}></MDBBtn>
                     </MDBModalHeader>
                     <MDBModalBody>
-                        <MDBInput className='mb-2' label='Tytuł' value={activeBook.title ? activeBook.title : ""} onChange={(e) => setActiveBook({...activeBook, title: e.target.value})}></MDBInput>
-                        <MDBInput className='mb-2' label='Adres URL okładki' value={activeBook.pngPath ? activeBook.pngPath : ""} onChange={(e) => setActiveBook({...activeBook, pngPath: e.target.value})}></MDBInput>
-                        <MDBInput className='mb-2' label='Grupa wiekowa' min={0} max={150} type='number' value={activeBook.ageGroup ? activeBook.ageGroup : 0} onChange={(e) => setActiveBook({...activeBook, ageGroup: e.target.value})}></MDBInput>
-                        <MDBInput className='mb-2' label='ISBN' min={0} type='number' value={activeBook.isbn ? activeBook.isbn : 0} onChange={(e) => setActiveBook({...activeBook, isbn: e.target.value})}></MDBInput>
-                        <MDBInput className='mb-2' label='Ilość' min={0} type='number' value={activeBook.amount ? activeBook.amount : 0} onChange={(e) => setActiveBook({...activeBook, amount: e.target.value})}></MDBInput>
-                        <div className='mb-2'>
-                            <span>Ocena: </span>
-                            <div style={{ width: "50%" }}>
-                                <Rating isRequired value={activeBook.rating ? activeBook.rating : 0} onChange={(e) => setActiveBook({...activeBook, rating: e})} />
+                        <form>
+                            <label className="form-label">Dane podstawowe:</label>
+                            <MDBInput className='mb-3' labelClass='col-form-label' label='Tytuł' value={activeBook.title ? activeBook.title : ""} onChange={(e) => setActiveBook({ ...activeBook, title: e.target.value })}></MDBInput>
+                            <MDBInput className='mb-3' labelClass='col-form-label' label='Adres URL okładki' type="url" value={activeBook.pngPath ? activeBook.pngPath : ""} onChange={(e) => setActiveBook({ ...activeBook, pngPath: e.target.value })}></MDBInput>
+                            <MDBInput className='mb-3' labelClass='col-form-label' label='Grupa wiekowa' min={0} max={150} type='number' value={activeBook.ageGroup ? activeBook.ageGroup : 0} onChange={(e) => setActiveBook({ ...activeBook, ageGroup: e.target.value })}></MDBInput>
+                            <MDBInput className='mb-3' labelClass='col-form-label' label='ISBN' min={0} type='number' value={activeBook.isbn ? activeBook.isbn : 0} onChange={(e) => setActiveBook({ ...activeBook, isbn: e.target.value })}></MDBInput>
+                            <MDBInput className='mb-3' labelClass='col-form-label' label='Ilość' min={0} type='number' value={activeBook.amount ? activeBook.amount : 0} onChange={(e) => setActiveBook({ ...activeBook, amount: e.target.value })}></MDBInput>
+
+                            <div className='mb-3 d-flex justify-content-start align-items-center'>
+                                <span className="me-3 form-label mb-0">Ocena: </span>
+                                <div style={{ width: "50%" }}>
+                                    <Rating id="book-rating" value={activeBook.rating ? activeBook.rating : 0} onChange={(e) => setActiveBook({ ...activeBook, rating: e })} />
+                                </div>
                             </div>
-                        </div>
+
+                            <label className="form-label">Kategoria:</label>
+                            <select className="form-select mb-3" value={activeBook.categoryId} onChange={(e) => setActiveBook({ ...activeBook, categoryId: e.target.value })}>
+                                {categoryList.map((category, i) => {
+                                    return <option key={i} value={category.id}>{category.category}</option>
+                                })}
+                            </select>
+
+                            <label className="form-label">Autorzy:</label>
+                            <MultiSelect
+                                options={authorsSelect}
+                                overrideStrings={{
+                                    "allItemsAreSelected": "Wszyscy autorzy są wybrani.",
+                                    "clearSearch": "Wyczyść wyszukiwanie",
+                                    "clearSelected": "Wyczyść zaznaczenie",
+                                    "noOptions": "Nie odnaleziono żadnych autorów",
+                                    "search": "Szukaj autorów...",
+                                    "selectAll": "Zaznacz wszystko",
+                                    "selectAllFiltered": "Zaznacz wszystko (filtrowane)",
+                                    "selectSomeItems": "Wybierz autorów książki...",
+                                    "create": "Utwórz",
+                                }}
+                                labelledBy="Autorzy"
+                                value={authorsSelected}
+                                onChange={setAuthorsSelected}>
+                            </MultiSelect>
+                        </form>
                     </MDBModalBody>
 
                     <MDBModalFooter>
@@ -138,6 +184,7 @@ export default function DashboardBooks() {
         setModifyDialogEdit(edit);
 
         setActiveBook(book);
+        setAuthorsSelected([]); // zrobić ładowanie autorów
 
         toggleModifyDialog();
     };
