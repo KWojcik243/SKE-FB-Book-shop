@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addUser(String name, String surname, String email, String password) {
-        User user = new User(name, surname, email, password);
+        User user = new User(name, surname, email, password, Role.USER);
         userRepository.save(user);
     }
 
