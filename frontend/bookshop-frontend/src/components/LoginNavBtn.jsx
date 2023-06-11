@@ -1,18 +1,21 @@
 import { MDBBtn, MDBDropdown, MDBDropdownItem, MDBDropdownMenu, MDBDropdownToggle, MDBIcon } from 'mdb-react-ui-kit';
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
 import { NavLink } from 'react-router-dom';
+import {AuthContext} from "./AuthContext.jsx";
 
 export default function LoginNavBtn() {
-    const userData = {name: "", surname: "Kowalski", isadmin: false};
+    const { user } = useContext(AuthContext);
 
-    if (userData.name && userData.name.length > 0) {
+    if (user) {
+        const isAdmin = user.role === '[ADMIN]';
+
         return (<>
             <MDBDropdown className='btn-group' >
-                <MDBBtn className='bg-success btn-success' style={{paddingInline: "15px", pointerEvents: "none"}} ><MDBIcon far icon="user-circle" className='me-2' />{userData.name + " " + userData.surname}</MDBBtn>
+                <MDBBtn className='bg-success btn-success' style={{paddingInline: "15px", pointerEvents: "none"}} ><MDBIcon far icon="user-circle" className='me-2' />{user.name + " " + user.surname}</MDBBtn>
                 <MDBDropdownToggle split className='btn-success' style={{paddingInline: "15px"}}></MDBDropdownToggle>
                 <MDBDropdownMenu>
-                    {userData.isadmin ? <></> : <li><NavLink to="/basket" className='dropdown-item'><MDBIcon fas icon="shopping-basket" className='me-3' />Koszyk</NavLink></li>}
-                    <li><NavLink to={userData.isadmin ? "/dashboard" : "/orders"} className='dropdown-item'><MDBIcon fas icon={userData.isadmin ? "tools" : "th-list"}  className='me-3' />{userData.isadmin ? "Panel administratora" : "Zamówienia"}</NavLink></li>
+                    {isAdmin ? <></> : <li><NavLink to="/basket" className='dropdown-item'><MDBIcon fas icon="shopping-basket" className='me-3' />Koszyk</NavLink></li>}
+                    <li><NavLink to={isAdmin ? "/dashboard" : "/orders"} className='dropdown-item'><MDBIcon fas icon={isadmin ? "tools" : "th-list"}  className='me-3' />{isAdmin ? "Panel administratora" : "Zamówienia"}</NavLink></li>
                     <li><NavLink to="/logout" className='dropdown-item'><MDBIcon fas icon="sign-out-alt"  className='me-3' />Wyloguj się</NavLink></li>
                 </MDBDropdownMenu>
             </MDBDropdown>

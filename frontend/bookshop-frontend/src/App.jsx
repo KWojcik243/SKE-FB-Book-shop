@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import './App.css'
@@ -17,7 +16,7 @@ import BasketPage from './pages/BasketPage';
 import OrdersPage from './pages/OrdersPage';
 import DashboardPage from './pages/DashboardPage';
 import ErrorMessage from './components/ErrorMessage';
-import { RequireAuth } from "react-auth-kit";
+import LogoutPage from "./pages/LogoutPage.jsx";
 
 function App() {
   return (
@@ -30,10 +29,11 @@ function App() {
             <Route path='/' element={ <HomePage /> }></Route>
             <Route path='/contact' element={ <ContactPage /> }></Route>
             <Route path='/login' element={ <LoginPage /> }></Route>
+            <Route path='/logout' element={ <LogoutPage /> }></Route>
             <Route path='/register' element={ <RegisterPage /> }></Route>
             <Route path='/catalog' element={ <CatalogPage /> }></Route>
             <Route path='/preview' element={ <BookPreviewPage /> }></Route>
-            <Route path='/basket' element={ <RequireAuth loginPath='/login'> <BasketPage /> </RequireAuth> }></Route>
+            <Route path='/basket' element={ <BasketPage /> }></Route>
             <Route path='/orders' element={ <OrdersPage /> }></Route>
             <Route path='/dashboard' element={ <DashboardPage /> }></Route>
             <Route path='/dashboard/books' element={ <DashboardPage /> }></Route>
