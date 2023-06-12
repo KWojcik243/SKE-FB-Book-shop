@@ -16,13 +16,11 @@ public class UserController {
         this.userService = userService;
     }
 
-    @Secured("ROLE_ADMIN")
     @PostMapping
     public void addUser(@RequestBody UserDTO userDTO) {
         userService.addUser(userDTO);
     }
 
-    @Secured("ROLE_ADMIN")
     @PutMapping("/{email}")
     public void changeUserPassword(@PathVariable String email,
                                    @RequestParam String previousPassword,
@@ -30,19 +28,16 @@ public class UserController {
         userService.changeUserPassword(email, previousPassword, newPassword);
     }
 
-    @Secured("ROLE_ADMIN")
     @DeleteMapping("/{email}")
     public void removeUser(@PathVariable String email) {
         userService.removeUser(email);
     }
 
-    @Secured("ROLE_ADMIN")
     @PutMapping("/grant-admin/{email}")
     public void grantAdmin(@PathVariable String email) {
         userService.grantAdmin(email);
     }
 
-    @Secured("ROLE_ADMIN")
     @PutMapping("/revoke-admin/{email}")
     public void revokeAdmin(@PathVariable String email) {
         userService.revokeAdmin(email);

@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/books")
-@CrossOrigin(origins = "http://127.0.0.1:5173")
+@CrossOrigin(origins = {"http://127.0.0.1:5173"})
 public class BookController {
 
     private final BookService bookService;
@@ -32,12 +32,12 @@ public class BookController {
         return ResponseEntity.ok(book);
     }
 
+
     @GetMapping
     public List<Book> getBooks() {
         return bookService.getBooks();
     }
 
-    @Secured("ROLE_ADMIN")
     @PostMapping
     public ResponseEntity<String> addBook(@RequestBody BookDTO bookDTO) {
         if (bookService.existsByTitle(bookDTO.getTitle())) {
@@ -48,14 +48,12 @@ public class BookController {
         return ResponseEntity.ok().body("Book " + bookDTO.getTitle() + " added successfully.");
     }
 
-    @Secured("ROLE_ADMIN")
     @PutMapping("/{bookId}")
     public ResponseEntity<String> editBook(@PathVariable int bookId, @RequestBody BookDTO bookDTO) {
         bookService.editBook(bookId, bookDTO);
         return ResponseEntity.ok().body("Book " + bookDTO.getTitle() + " edited successfully.");
     }
 
-    @Secured("ROLE_ADMIN")
     @DeleteMapping("/{bookId}")
     public ResponseEntity<String> deleteBook(@PathVariable int bookId) {
         boolean removed = bookService.deleteBook(bookId);

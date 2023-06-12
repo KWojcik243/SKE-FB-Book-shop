@@ -36,7 +36,6 @@ public class AuthorController {
         return authorService.getAuthors();
     }
 
-    @Secured("ROLE_ADMIN")
     @PostMapping
     public ResponseEntity<String> addAuthor(@RequestParam String name, @RequestParam String surname) {
         if (authorService.existsByNameAndSurname(name, surname)) {
@@ -47,7 +46,6 @@ public class AuthorController {
         return ResponseEntity.ok().body("Author " + name + " " + surname + " added successfully.");
     }
 
-    @Secured("ROLE_ADMIN")
     @DeleteMapping("/{authorId}")
     public ResponseEntity<String> deleteAuthor(@PathVariable int authorId) {
         boolean removed = authorService.deleteAuthor(authorId);
@@ -58,7 +56,6 @@ public class AuthorController {
         }
     }
 
-    @Secured("ROLE_ADMIN")
     @PutMapping("/{authorId}")
     public ResponseEntity<String> updateAuthor(@PathVariable int authorId, @RequestBody AuthorDTO authorDTO){
         boolean updated = authorService.updateAuthor(authorId, authorDTO);

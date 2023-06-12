@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/categories")
+//@ApiOperation("Products API")
 public class BookCategoryController {
     private final BookCategoryService categoryService;
 
@@ -34,14 +35,12 @@ public class BookCategoryController {
         return ResponseEntity.ok(category);
     }
 
-    @Secured("ROLE_ADMIN")
     @PostMapping
     public ResponseEntity<BookCategory> addCategory(@RequestBody BookCategoryDTO bookCategoryDTO) {
         BookCategory newCategory = categoryService.addCategory(bookCategoryDTO);
         return ResponseEntity.ok(newCategory);
     }
 
-    @Secured("ROLE_ADMIN")
     @PutMapping("/{id}")
     public ResponseEntity<String> editCategory(@PathVariable int id, @RequestBody BookCategoryDTO bookCategoryDTO) {
         boolean updated = categoryService.updateCategory(id, bookCategoryDTO);
@@ -52,7 +51,6 @@ public class BookCategoryController {
         }
     }
 
-    @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCategory(@PathVariable int id) {
         categoryService.deleteCategory(id);
