@@ -31,7 +31,15 @@ export default function DashboardCategories() {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/categories');
+            // const response = await axios.get('http://localhost:8080/categories');
+            const response = await fetch('http://localhost:8080/categories',
+                {
+                    method:'GET',
+                    mode: 'no-cors',
+                    headers:{
+                        'Content-type':'application/json',
+                        'Authorization':'Bearer ' + localStorage.getItem("accessToken")
+                    },})
             setCategoryList(response.data);
         } catch (error) {
             showErrorMessage('Błąd podczas pobierania danych z serwera: ' + error);
@@ -114,7 +122,7 @@ export default function DashboardCategories() {
                         </tr>
                     </MDBTableHead>
                     <MDBTableBody>
-                        {categoryList
+                        {categoryList && categoryList
                             .filter((category) => {
                                 return search.trim() === ''
                                     ? category

@@ -20,37 +20,20 @@ const AuthContextProvider = ({ children }) => {
             return;
         }
 
-        try {
-            const response = await axios.get('http://localhost:8080/auth/check-token', {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
-
-            if (response.status === 200) {
-                const user = response.data;
-                setUser(user);
-            } else {
-                localStorage.removeItem('accessToken');
-            }
-        } catch (error) {
-            showErrorMessage('Błąd weryfikacji tokena dostępu: ' + error);
-        }
+        let userData = jwtDecode(accessToken);
+        setUser({email: userData.sub, role: userData.aud });
 
         setLoading(false);
     };
 
     let login = async (email, password) => {
         try {
-            console.log(email, password);
             const response = await axios.post('http://localhost:8080/auth/authenticate', { email: email, password: password });
-
             if (response.status === 200) {
                 const { token } = response.data;
                 localStorage.setItem('accessToken', token);
                 let userData = jwtDecode(token);
                 setUser({email: userData.sub, role: userData.aud });
-                console.log(user);
             } else {
                 showErrorMessage('Błąd logowania.');
             }

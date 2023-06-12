@@ -19,7 +19,8 @@ export default function CatalogPage() {
     const fetchData = async () => {
         try {
             const response = await axios.get('http://localhost:8080/books', {headers: {
-                    'Content-type':'application/json',
+                    'Content-Type':'application/json',
+                    'Access-Control-Allow-Origin':'http://127.0.0.1:5173',
                     'Authorization':'Bearer ' + localStorage.getItem('accessToken')
                 },});
             setBookList(response.data);
