@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { showErrorMessage } from '../components/ErrorMessage';
 
-export default function CatalogPage() {  
+export default function CatalogPage() {
     const [search, setSearch] = useState('');
 
     const userData = { name: "X", isadmin: false };
@@ -18,11 +18,22 @@ export default function CatalogPage() {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/books', {headers: {
-                    'Content-Type':'application/json',
-                    'Access-Control-Allow-Origin':'http://127.0.0.1:5173',
-                    'Authorization':'Bearer ' + localStorage.getItem('accessToken')
-                },});
+            const response = await axios.get('http://localhost:8080/books');
+            // const response = await fetch('http://localhost:8080/books',
+            //     {
+            //         method:'GET',
+            //         mode: 'cors',
+            //         withCredentials: false,
+            //         redirect: 'follow',
+            //         cache: 'no-cache',
+            //         headers:{
+            //             'Content-type':'application/json',
+            //             'Access-Control-Allow-Origin': '*',
+            //             'Access-Control-Allow-Credentials':false,
+            //             'Authorization':'Bearer ' + localStorage.getItem("accessToken")
+            //         },})
+
+
             setBookList(response.data);
         } catch (error) {
             showErrorMessage('Błąd podczas pobierania danych z serwera: ' + error);
@@ -30,7 +41,7 @@ export default function CatalogPage() {
     };
 
     const bookCards = <MDBRow className='row-cols-1 row-cols-md-2 g-4 mt-3'>
-        {bookList.filter((item) => {
+        {bookList && bookList.filter((item) => {
             return search.trim() === '' ? item : (item.title + item.author + item.category).toLowerCase().includes(search.trim())
         }).map((book, i) => <>
             <MDBCol key={i}>

@@ -32,14 +32,26 @@ export default function DashboardCategories() {
     const fetchData = async () => {
         try {
             // const response = await axios.get('http://localhost:8080/categories');
-            const response = await fetch('http://localhost:8080/categories',
-                {
-                    method:'GET',
-                    mode: 'no-cors',
-                    headers:{
-                        'Content-type':'application/json',
-                        'Authorization':'Bearer ' + localStorage.getItem("accessToken")
-                    },})
+            // const response = await fetch('http://localhost:8080/categories',
+            //     {
+            //         method:'GET',
+            //         mode: 'no-cors',
+            //         headers:{
+            //             'Content-type':'application/json',
+            //             'Authorization':'Bearer ' + localStorage.getItem("accessToken")
+            //         },})
+
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", "Bearer " + localStorage.getItem("accessToken"));
+            myHeaders.append("Content-Type", "application/json");
+
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow'
+            };
+
+            const response = await fetch("http://localhost:8080/categories", requestOptions)
             setCategoryList(response.data);
         } catch (error) {
             showErrorMessage('Błąd podczas pobierania danych z serwera: ' + error);
