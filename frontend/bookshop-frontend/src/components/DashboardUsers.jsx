@@ -1,20 +1,31 @@
 import { MDBBtn, MDBIcon, MDBTable, MDBTableBody, MDBTableHead } from "mdb-react-ui-kit";
-import { useState } from "react";
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {showErrorMessage} from "./ErrorMessage.jsx";
 
 
 export default function DashboardUsers() {
     const [search, setSearch] = useState('');
+    const [users, setUsers] = useState([]);
 
-    const users = [
-        { id: 0, name: "X", surname: "XXX", isadmin: false },
-        { id: 1, name: "Y", surname: "YYY", isadmin: true },
-    ];
+    useEffect(() => {
+        fetchData();
+    }, []);
 
-    const makeAdmin = (id) => {
+    const fetchData = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/auth/users');
+            setUsers(response.data);
+        } catch (error) {
+            showErrorMessage('Wystąpił błąd podczas pobierania danych z serwera: ' + error);
+        }
+    };
+
+    const makeAdmin = async (id) => {
 
     };
 
-    const removeAdmin = (id) => {
+    const removeAdmin = async (id) => {
 
     };
 

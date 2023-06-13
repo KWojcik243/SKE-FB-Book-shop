@@ -1,8 +1,11 @@
 package com.example.demo.auth;
 
+import com.example.demo.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -55,5 +58,10 @@ public class AuthenticationController {
     @PutMapping("/revoke-admin/{email}")
     public void revokeAdmin(@PathVariable String email) {
         service.revokeAdmin(email);
+    }
+
+    @GetMapping("/users")
+    public List<User> getUsers(){
+        return service.getUsers();
     }
 }

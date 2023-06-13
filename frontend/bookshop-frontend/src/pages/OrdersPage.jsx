@@ -29,12 +29,12 @@ export default function OrdersPage() {
             const response = await axios.get('http://localhost:8080/orders/' + user.email);
 
             let items = [];
-            for (const [key, value] of Object.entries(response.data.cartItems)) {
-                const book = await axios.get(`http://localhost:8080/books/${key}`);
-                items.push({...book.data, quantity: value});
-            }
+            // for (const [key, value] of Object.entries(response.data.cartItems)) {
+            //     const book = await axios.get(`http://localhost:8080/books/${key}`);
+            //     items.push({...book.data, quantity: value});
+            // }
 
-            setBasket(items);
+            setOrders(items);
             console.log(items);
         } catch (error) {
             showErrorMessage('Błąd podczas pobierania danych z serwera: ' + error);

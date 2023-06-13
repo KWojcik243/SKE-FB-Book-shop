@@ -45,12 +45,13 @@ export default function DashboardCategories() {
         }
 
         try {
-            await axios.post('http://localhost:8080/categories', {
+            const response = await axios.post('http://localhost:8080/categories', {
                 category: newCategory
             });
+
             window.location.reload();
         } catch (error) {
-            showErrorMessage('Błąd podczas dodawania kategorii: ' + error);
+            showErrorMessage("Kategoria już istnieje.");
         }
     };
 

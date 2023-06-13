@@ -59,10 +59,12 @@ export default function BasketPage() {
 
     const createOrder = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/orders/', {...correspondence, userEmail: user.email, status: "nowe", paymentType: paymentType});
+            const ordersData = {...correspondence, userEmail: user.email, status: "nowe", paymentType: paymentType};
+            const response = await axios.post('http://localhost:8080/orders', ordersData);
+            console.log(response)
 
             for (const book of basket) {
-                await axios.put(`http://localhost:8080/orders/${response.data.body}/items`, {bookId: book.id, quantity: book.quantity});
+                await axios.put(`http://localhost:8080/orders/${response.data}/items`, {bookId: book.id, quantity: book.quantity});
             }
 
             window.location.reload();
@@ -110,7 +112,7 @@ export default function BasketPage() {
 
                     <h4 className="mb-3">Dane korespondencyjne</h4>
 
-                    <form className="needs-validation" noValidate onSubmit={createOrder}>
+                    <div>
                         <div className="row g-3">
                             <div className="col-12">
                                 <label htmlFor="address" className="form-label">Adres</label>
@@ -160,8 +162,8 @@ export default function BasketPage() {
 
                         <hr className="my-4"></hr>
 
-                        <button className="w-100 btn btn-success btn-lg" type="submit"><MDBIcon fas icon="truck" className='me-2' />Zamów książki</button>
-                    </form>
+                        <button className="w-100 btn btn-success btn-lg" onClick={createOrder}><MDBIcon fas icon="truck" className='me-2' />Zamów książki</button>
+                    </div>
                 </MDBCol>
                 <MDBCol md='3'></MDBCol>
             </MDBRow>

@@ -90,7 +90,7 @@ export default function DashboardOrders() {
                     }).map((order, i) => {
                         return (<tr key={i}>
                             <td>{order.id}</td>
-                            <td>{order.user && order.user.name + " " + order.user.surname}</td>
+                            <td>{order.userEmail}</td>
                             <td>{(new Date(order.lastStatusUpdate)).toLocaleString()}</td>
                             <td className="text-center">
                                 <MDBBtn outline rounded color='success' size='sm' className="m-1" onClick={() => changeStatus(order)}><MDBIcon fas icon="exchange-alt" className='me-2' />Zmień</MDBBtn>

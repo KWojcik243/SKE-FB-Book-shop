@@ -2,10 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.OrderDTO;
 import com.example.demo.dto.OrderItemDTO;
-import com.example.demo.entity.Book;
-import com.example.demo.entity.Order;
-import com.example.demo.entity.OrderItem;
-import com.example.demo.entity.User;
+import com.example.demo.entity.*;
 import com.example.demo.repository.BookRepository;
 import com.example.demo.repository.OrderItemRepository;
 import com.example.demo.repository.OrderRepository;
@@ -13,6 +10,7 @@ import com.example.demo.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +43,13 @@ public class OrderServiceImpl implements OrderService {
     public int addOrder(OrderDTO orderDTO) {
         Order order = new Order(orderDTO.getLastStatusUpdate(), orderDTO.getStatus(), orderDTO.getPaymentType(),
                 orderDTO.getAddress(), orderDTO.getCity(), orderDTO.getPostCode());
+        order.setUser(userRepository.findByEmail(orderDTO.getUserEmail()).get());
         orderRepository.save(order);
+
+        User user = userRepository.findByEmail(orderDTO.getUserEmail()).get();
+        user.getCart().setCartItems(new HashMap<>());
+        userRepository.save(user);
+
         return order.getId();
     }
 
