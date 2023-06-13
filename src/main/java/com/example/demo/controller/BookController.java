@@ -50,17 +50,21 @@ public class BookController {
 
     @PutMapping("/{bookId}")
     public ResponseEntity<String> editBook(@PathVariable int bookId, @RequestBody BookDTO bookDTO) {
-        bookService.editBook(bookId, bookDTO);
-        return ResponseEntity.ok().body("Book " + bookDTO.getTitle() + " edited successfully.");
+        try {
+            bookService.editBook(bookId, bookDTO);
+            return ResponseEntity.ok().body("Book " + bookDTO.getTitle() + " edited successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{bookId}")
     public ResponseEntity<String> deleteBook(@PathVariable int bookId) {
-        boolean removed = bookService.deleteBook(bookId);
-        if (removed) {
+        try {
+            bookService.deleteBook(bookId);
             return ResponseEntity.ok("Book with id " + bookId + " deleted.");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book with id " + bookId + " not found.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

@@ -36,18 +36,24 @@ public class BookCategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<BookCategory> addCategory(@RequestBody BookCategoryDTO bookCategoryDTO) {
-        BookCategory newCategory = categoryService.addCategory(bookCategoryDTO);
-        return ResponseEntity.ok(newCategory);
+    public ResponseEntity<?> addCategory(@RequestBody BookCategoryDTO bookCategoryDTO) {
+        try {
+            BookCategory newCategory = categoryService.addCategory(bookCategoryDTO);
+            return ResponseEntity.ok(newCategory);
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> editCategory(@PathVariable int id, @RequestBody BookCategoryDTO bookCategoryDTO) {
-        boolean updated = categoryService.updateCategory(id, bookCategoryDTO);
-        if (updated) {
+        try{
+            categoryService.updateCategory(id, bookCategoryDTO);
             return ResponseEntity.ok("Category with ID " + id + " has been updated.");
-        } else {
-            return ResponseEntity.badRequest().body("Unable to update category with ID " + id + ".");
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

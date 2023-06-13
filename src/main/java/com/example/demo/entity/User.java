@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -36,16 +37,17 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @Column(name="role")
+    @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role;
-  
+
     @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "cart_id")
     @JsonIgnore
     private Cart cart;
 
-    public User() {}
+    public User() {
+    }
 
     public User(String name, String surname, String email, String password, Role role) {
         this.name = name;
@@ -90,15 +92,15 @@ public class User implements UserDetails {
         return true;
     }
 
-    public boolean isAdmin(){
+    public boolean isAdmin() {
         return this.role == Role.ADMIN;
     }
 
-    public void grantAdminPrivileges(){
+    public void grantAdminPrivileges() {
         this.role = Role.ADMIN;
     }
 
-    public void revokeAdminPrivileges(){
+    public void revokeAdminPrivileges() {
         this.role = Role.USER;
     }
 

@@ -9,6 +9,6 @@ public interface BookCategoryService {
     List<BookCategory> getAllCategories();
     BookCategory getCategoryById(int id);
     BookCategory addCategory(BookCategoryDTO bookCategoryDTO);
-    boolean updateCategory(int categoryId, BookCategoryDTO bookCategoryDTO);
+    void updateCategory(int categoryId, BookCategoryDTO bookCategoryDTO);
     void deleteCategory(int id);
 }
