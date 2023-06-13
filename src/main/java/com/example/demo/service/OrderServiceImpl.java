@@ -5,6 +5,7 @@ import com.example.demo.dto.OrderItemDTO;
 import com.example.demo.entity.Book;
 import com.example.demo.entity.Order;
 import com.example.demo.entity.OrderItem;
+import com.example.demo.entity.User;
 import com.example.demo.repository.BookRepository;
 import com.example.demo.repository.OrderItemRepository;
 import com.example.demo.repository.OrderRepository;
@@ -36,10 +37,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void addOrder(OrderDTO orderDTO) {
+    public List<Order> getOrdersByUserEmail(String email) {
+        return orderRepository.findByUserEmail(email);
+    }
+
+    @Override
+    public int addOrder(OrderDTO orderDTO) {
         Order order = new Order(orderDTO.getLastStatusUpdate(), orderDTO.getStatus(), orderDTO.getPaymentType(),
                 orderDTO.getAddress(), orderDTO.getCity(), orderDTO.getPostCode());
         orderRepository.save(order);
+        return order.getId();
     }
 
     @Override
@@ -55,9 +62,9 @@ public class OrderServiceImpl implements OrderService {
             order.setCity(orderDTO.getCity());
             order.setAddress(orderDTO.getAddress());
             order.setPaymentType(orderDTO.getPaymentType());
-
-            if (userRepository.existsById(orderDTO.getUserId())) {
-                order.setUser(userRepository.getReferenceById(orderDTO.getUserId()));
+            Optional<User> optionalUser = userRepository.findByEmail(orderDTO.getUserEmail());
+            if (optionalUser.isPresent()) {
+                order.setUser(optionalUser.get());
             }
 
             order.setPostCode(orderDTO.getPostCode());

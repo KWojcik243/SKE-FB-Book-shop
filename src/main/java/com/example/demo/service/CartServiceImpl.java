@@ -50,8 +50,12 @@ public class CartServiceImpl implements CartService{
         int quantityDelta = orderItemDTO.getQuantity() - quantityInStock;
         if(quantityDelta > book.getAmount()){
             throw new RuntimeException("Not enough book in magazine");
-        }
-        else {
+        } else if (orderItemDTO.getQuantity() == 0) {
+            cart.getCartItems().remove(book.getId());
+            book.updateAmountBy(-quantityDelta);
+            cartRepository.save(cart);
+            bookRepository.save(book);
+        } else {
             cart.getCartItems().put(book.getId(), orderItemDTO.getQuantity());
             book.updateAmountBy(-quantityDelta);
             cartRepository.save(cart);
