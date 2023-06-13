@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,7 +26,14 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
+
+    @JsonProperty("userEmail")
+    public String getUserEmail(){
+        if (this.user == null) return ""; // todo mozna to usunac na czystej ladnej bazie
+        else return this.user.getEmail();
+    }
 
     @Column(name = "last_status_update")
     private Timestamp lastStatusUpdate;
