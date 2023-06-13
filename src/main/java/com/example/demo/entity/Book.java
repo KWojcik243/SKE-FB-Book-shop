@@ -81,4 +81,17 @@ public class Book {
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", pngPath='" + pngPath + '\'' +
+                ", ageGroup=" + ageGroup +
+                ", rating=" + rating +
+                ", isbn=" + isbn +
+                ", amount=" + amount +
+                '}';
+    }
 }

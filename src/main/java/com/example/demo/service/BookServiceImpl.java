@@ -69,6 +69,8 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteBook(int bookId) {
         Optional<Book> optionalBook = bookRepository.findById(bookId);
+        System.out.println(optionalBook.get());
+        System.out.println(bookId);
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
             System.out.println(book);
