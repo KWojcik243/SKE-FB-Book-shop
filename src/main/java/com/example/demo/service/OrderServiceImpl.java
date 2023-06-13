@@ -7,7 +7,9 @@ import com.example.demo.repository.BookRepository;
 import com.example.demo.repository.OrderItemRepository;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
@@ -143,7 +146,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order getOrderById(int orderId) {
-        if (!orderRepository.existsById(orderId)) return null;
-        return orderRepository.getReferenceById(orderId);
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        return optionalOrder.orElse(null);
     }
 }

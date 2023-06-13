@@ -4,12 +4,15 @@ import com.example.demo.dto.BookDTO;
 import com.example.demo.entity.Book;
 import com.example.demo.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/books")
@@ -24,18 +27,20 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Book> getBookById(@PathVariable int id) {
+    public ResponseEntity<EntityModel<Book>> getBookById(@PathVariable int id) {
         Book book = bookService.getBookById(id);
         if (book == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(book);
+        EntityModel<Book> resource = getBookResource(book);
+        return ResponseEntity.ok(resource);
     }
 
-
     @GetMapping
-    public List<Book> getBooks() {
-        return bookService.getBooks();
+    public ResponseEntity<CollectionModel<EntityModel<Book>>> getBooks() {
+        List<Book> books = bookService.getBooks();
+        CollectionModel<EntityModel<Book>> resource = getBooksResource(books);
+        return ResponseEntity.ok(resource);
     }
 
     @PostMapping
@@ -66,5 +71,23 @@ public class BookController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    private EntityModel<Book> getBookResource(Book book) {
+        EntityModel<Book> resource = EntityModel.of(book);
+        resource.add(WebMvcLinkBuilder.linkTo(BookController.class).slash(book.getId()).withSelfRel());
+        resource.add(WebMvcLinkBuilder.linkTo(BookController.class).slash(book.getId()).withRel("PUT"));
+        resource.add(WebMvcLinkBuilder.linkTo(BookController.class).slash(book.getId()).withRel("DELETE"));
+        return resource;
+    }
+
+    private CollectionModel<EntityModel<Book>> getBooksResource(List<Book> books) {
+        List<EntityModel<Book>> bookResources = books.stream()
+                .map(this::getBookResource)
+                .collect(Collectors.toList());
+
+        CollectionModel<EntityModel<Book>> resource = CollectionModel.of(bookResources);
+        resource.add(WebMvcLinkBuilder.linkTo(BookController.class).withSelfRel());
+        return resource;
     }
 }

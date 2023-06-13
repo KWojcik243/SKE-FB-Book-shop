@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @Setter
 @ToString
 @JsonIgnoreProperties("books")
-public class Author {
+public class Author extends RepresentationModel<Author> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

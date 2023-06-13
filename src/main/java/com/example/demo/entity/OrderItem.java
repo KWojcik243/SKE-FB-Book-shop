@@ -6,13 +6,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.hateoas.RepresentationModel;
 
 @Entity
 @Table(name = "OrderItems")
 @Getter
 @Setter
 @ToString
-public class OrderItem {
+public class OrderItem extends RepresentationModel<OrderItem> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
