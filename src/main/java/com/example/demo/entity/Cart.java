@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "Carts")
@@ -21,16 +22,30 @@ public class Cart {
     @OneToOne(mappedBy = "cart", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User user;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinTable(
-            name = "cart_book",
-            joinColumns = @JoinColumn(name = "cart_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id")
+//    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
+//    @JoinTable(
+//            name = "cart_book",
+//            joinColumns = @JoinColumn(name = "cart_id"),
+//            inverseJoinColumns = @JoinColumn(name = "book_id")
+//    )
+//
+//    private List<Book> books;
+
+    @ElementCollection
+    @CollectionTable(
+            name = "cart_items",
+            joinColumns = @JoinColumn(name = "cart_id")
     )
-    private List<Book> books;
+    @MapKeyJoinColumn(name = "book_id")
+    @Column(name = "quantity")
+    private Map<Book, Integer> cartItems;
 
 
     public Cart() {
+    }
+
+    public Cart(User user){
+        this.user = user;
     }
 
 }
