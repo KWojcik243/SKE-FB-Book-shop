@@ -59,10 +59,6 @@ public class AuthenticationService {
 
     }
 
-    public AuthenticationResponse logout(LogoutRequest request) {
-        return AuthenticationResponse.builder().token(jwtService.setTokenExpired(request.token)).build();
-    }
-
     public void changeUserPassword(String email, String previousPassword, String newPassword) {
         User user = userRepository.findByEmail(email).orElse(null);
 

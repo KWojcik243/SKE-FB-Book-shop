@@ -29,13 +29,6 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.authenticate(request));
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<AuthenticationResponse> logout(
-            @RequestBody LogoutRequest request
-    ) {
-        return ResponseEntity.ok(service.logout(request));
-    }
-
     @PutMapping("/{email}")
     public ResponseEntity<String> changeUserPassword(@PathVariable String email,
                                    @RequestParam String previousPassword,
