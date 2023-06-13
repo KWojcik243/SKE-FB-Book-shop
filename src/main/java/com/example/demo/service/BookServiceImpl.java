@@ -7,7 +7,9 @@ import com.example.demo.entity.BookCategory;
 import com.example.demo.repository.AuthorRepository;
 import com.example.demo.repository.BookCategoryRepository;
 import com.example.demo.repository.BookRepository;
+import jakarta.transaction.Transactional;
 import jdk.jfr.Category;
+import org.springframework.aop.support.DelegatingIntroductionInterceptor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -65,48 +67,59 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public boolean deleteBook(int bookId) {
+    public void deleteBook(int bookId) {
         Optional<Book> optionalBook = bookRepository.findById(bookId);
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
+            System.out.println(book);
 
-            book.setAuthors(Collections.emptyList());
+            for (Author author : book.getAuthors()) {
+                author.getBooks().remove(book);
+                authorRepository.save(author);
 
-            bookRepository.delete(book);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean editBook(int bookId, BookDTO bookDTO) {
-        Optional<Book> optionalBook = bookRepository.findById(bookId);
-        if (optionalBook.isPresent()) {
-            Book book = optionalBook.get();
-            book.setTitle(bookDTO.getTitle());
-            book.setPngPath(bookDTO.getPngPath());
-            book.setAgeGroup(bookDTO.getAgeGroup());
-            book.setRating(bookDTO.getRating());
-            book.setIsbn(bookDTO.getIsbn());
-            book.setAmount(bookDTO.getAmount());
-
-            // get authors from list of ids
-//            List<Author> newAuthors = new java.util.ArrayList<>();
-//            for (int id : bookDTO.getAuthorIds()) {
-//                if (authorRepository.existsById(id)) newAuthors.add(authorRepository.getReferenceById(id));
-//            }
-//            book.setAuthors(newAuthors);
-            List<Author> authors = authorRepository.findAllById(bookDTO.getAuthorIds());
-            if (!authors.isEmpty()) {
-                book.setAuthors(authors);
+                book.removeAuthor(author);
+                bookRepository.save(book);
             }
 
-            // get catrgory by id
-            BookCategory category = bookCategoryRepository.getReferenceById(bookDTO.getCategoryId());
-            book.setCategory(category);
-
-            return true;
+            bookRepository.delete(book);
+        } else {
+            throw new RuntimeException("Book with id " + bookId + " doesn't exist in the database.");
         }
-        return false;
+    }
+
+
+
+
+
+    @Override
+    public void editBook(int bookId, BookDTO bookDTO) {
+        if(!bookRepository.existsById(bookId)){
+            throw new RuntimeException("Book with id " + bookId + " don't exist in database.");
+        }
+
+        Optional<Book> optionalBook = bookRepository.findByTitle(bookDTO.getTitle());
+        if (optionalBook.isPresent() && optionalBook.get().getId() != bookId) {
+            throw new RuntimeException("Book with title " + bookDTO.getTitle() + " already exists.");
+        }
+
+
+        Book book = bookRepository.getReferenceById(bookId);
+        book.setTitle(bookDTO.getTitle());
+        book.setPngPath(bookDTO.getPngPath());
+        book.setAgeGroup(bookDTO.getAgeGroup());
+        book.setRating(bookDTO.getRating());
+        book.setIsbn(bookDTO.getIsbn());
+        book.setAmount(bookDTO.getAmount());
+
+
+        List<Author> authors = authorRepository.findAllById(bookDTO.getAuthorIds());
+        if (!authors.isEmpty()) {
+            book.setAuthors(authors);
+        }
+
+        // get catrgory by id
+        BookCategory category = bookCategoryRepository.getReferenceById(bookDTO.getCategoryId());
+        book.setCategory(category);
+        bookRepository.save(book);
     }
 }

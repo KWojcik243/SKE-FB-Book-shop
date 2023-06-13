@@ -14,7 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookDTO {
-    private int id;
     private String title;
     private String pngPath;
     private int ageGroup;

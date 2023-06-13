@@ -12,13 +12,13 @@ public interface BookService {
 
     public void addBook(BookDTO bookDTO);
 
-    public boolean editBook(int bookId,
-                            BookDTO bookDTO);
+    public void editBook(int bookId,
+                         BookDTO bookDTO);
 
 
     public List<Book> getBooksByAuthorId(int id);
 
     public boolean existsByTitle(String title);
 
-    public boolean deleteBook(int bookId);
+    public void deleteBook(int bookId);
 }
