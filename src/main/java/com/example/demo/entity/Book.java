@@ -1,11 +1,11 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
 
@@ -51,7 +51,8 @@ public class Book {
     @JoinColumn(name = "category_id")
     private BookCategory category;
 
-    public Book() {}
+    public Book() {
+    }
 
     public Book(String title, String pngPath, int ageGroup, float rating, long isbn, int amount) {
         this.title = title;
@@ -62,15 +63,15 @@ public class Book {
         this.amount = amount;
     }
 
-    public boolean updateAmountBy(int nAmount){
-        if(this.amount + nAmount < 0){
+    public boolean updateAmountBy(int nAmount) {
+        if (this.amount + nAmount < 0) {
             return false;
         }
         this.amount += nAmount;
         return true;
     }
 
-    public void removeAuthor(Author author){
+    public void removeAuthor(Author author) {
         this.authors.remove(author);
     }
 
@@ -93,5 +94,17 @@ public class Book {
                 ", isbn=" + isbn +
                 ", amount=" + amount +
                 '}';
+    }
+
+    @JsonProperty("categoryId")
+    public int getCategoryId() {
+        if (category != null) {
+            return category.getId();
+        }
+        return 0;
+    }
+
+    public void setCategory(BookCategory category) {
+        this.category = category;
     }
 }

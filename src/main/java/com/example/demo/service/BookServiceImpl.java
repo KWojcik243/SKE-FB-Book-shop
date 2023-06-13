@@ -7,9 +7,6 @@ import com.example.demo.entity.BookCategory;
 import com.example.demo.repository.AuthorRepository;
 import com.example.demo.repository.BookCategoryRepository;
 import com.example.demo.repository.BookRepository;
-import jakarta.transaction.Transactional;
-import jdk.jfr.Category;
-import org.springframework.aop.support.DelegatingIntroductionInterceptor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -45,6 +42,10 @@ public class BookServiceImpl implements BookService {
         if (!authors.isEmpty()) {
             book.setAuthors(authors);
         }
+        BookCategory category = bookCategoryRepository.getCategoryById(bookDTO.getCategoryId());
+        if (category != null) {
+            book.setCategory(category);
+        }
         bookRepository.save(book);
     }
 
@@ -73,15 +74,10 @@ public class BookServiceImpl implements BookService {
         System.out.println(bookId);
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
-            System.out.println(book);
 
-            for (Author author : book.getAuthors()) {
-                author.getBooks().remove(book);
-                authorRepository.save(author);
+            book.setAuthors(Collections.emptyList());
+            book.setCategory(null);
 
-                book.removeAuthor(author);
-                bookRepository.save(book);
-            }
 
             bookRepository.delete(book);
         } else {

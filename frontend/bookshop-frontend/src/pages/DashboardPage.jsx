@@ -5,13 +5,20 @@ import DashboardOrders from "../components/DashboardOrders";
 import DashboardUsers from "../components/DashboardUsers";
 import DashboardAuthors from "../components/DashboardAuthors.jsx";
 import DashboardCategories from "../components/DashboardCategories.jsx";
+import {useContext} from "react";
+import {AuthContext} from "../components/AuthContext.jsx";
+import LoadingPage from "./LoadingPage.jsx";
 
 export default function DashboardPage() {
     const location = useLocation();
+    const { user, loading } = useContext(AuthContext);
 
-    const userData = {name: "x"};
+    if (loading)
+        return <LoadingPage />;
 
-    if (!userData.name)
+    const isAdmin = user && user.role === '[ADMIN]';
+
+    if (!isAdmin)
         return <Navigate to='/'></Navigate>;
 
     if (location.pathname === '/dashboard')

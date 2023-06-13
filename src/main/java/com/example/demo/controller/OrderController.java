@@ -32,8 +32,8 @@ public class OrderController {
     }
 
     @PostMapping
-    public void addOrder(@RequestBody OrderDTO orderDTO) {
-        orderService.addOrder(orderDTO);
+    public ResponseEntity<Integer> addOrder(@RequestBody OrderDTO orderDTO) {
+        return ResponseEntity.ok().body(orderService.addOrder(orderDTO));
     }
 
     @DeleteMapping("/{orderId}")
@@ -55,5 +55,10 @@ public class OrderController {
         catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @PostMapping("/{userEmail}")
+    public List<Order> getUserOrders(@PathVariable String userEmail) {
+        return orderService.getOrdersByUserEmail(userEmail);
     }
 }

@@ -8,7 +8,8 @@ import java.util.List;
 
 public interface OrderService {
     public List<Order> getOrdersByUserId(int id);
-    public void addOrder(OrderDTO orderDTO);
+    public int addOrder(OrderDTO orderDTO);
+    public List<Order> getOrdersByUserEmail(String email);
 
     public List<Order> getAllOrders();
 

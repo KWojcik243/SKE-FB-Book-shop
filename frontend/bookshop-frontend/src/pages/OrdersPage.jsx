@@ -1,17 +1,45 @@
 import { MDBBadge, MDBCol, MDBContainer, MDBListGroup, MDBListGroupItem, MDBRow } from "mdb-react-ui-kit";
 import { Navigate } from "react-router-dom";
+import {useContext, useEffect, useState} from "react";
+import {AuthContext} from "../components/AuthContext.jsx";
+import LoadingPage from "./LoadingPage.jsx";
+import axios from "axios";
+import {showErrorMessage} from "../components/ErrorMessage.jsx";
 
 
 export default function OrdersPage() {
-    const orders = [
-        { id: 0, books: ["Pan Tadeusz", "xxx"], state: 1, lastUpdated: "2023-06-06" },
-        { id: 1, books: ["dfd"], state: 2, lastUpdated: "2023-05-16" },
-    ];
+    const { user, loading } = useContext(AuthContext);
 
-    const userData = { name: "X" };
+    if (loading)
+        return <LoadingPage />;
 
-    if (!userData.name)
+    const isUser = user && user.role !== '[ADMIN]';
+
+    if (!isUser)
         return <Navigate to="/"></Navigate>;
+
+    const [orders, setOrders] = useState([]);
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/orders/' + user.email);
+
+            let items = [];
+            for (const [key, value] of Object.entries(response.data.cartItems)) {
+                const book = await axios.get(`http://localhost:8080/books/${key}`);
+                items.push({...book.data, quantity: value});
+            }
+
+            setBasket(items);
+            console.log(items);
+        } catch (error) {
+            showErrorMessage('Błąd podczas pobierania danych z serwera: ' + error);
+        }
+    };
 
     if (orders.length < 1)
         return (<>
@@ -36,7 +64,7 @@ export default function OrdersPage() {
                     <h2 className='text-center mb-5'>Twoje zamówienia</h2>
 
                     <MDBListGroup style={{ minWidth: '22rem' }} light>
-                        {orders.map((order, i) => {
+                        {orders && orders.map((order, i) => {
                             return <MDBListGroupItem key={i} className='d-flex justify-content-between align-items-center'>
                                 <div>
                                     <div className='fw-bold'>Zamówienie #{order.id}</div>

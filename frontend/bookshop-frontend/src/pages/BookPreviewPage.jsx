@@ -1,9 +1,10 @@
 import { Rating } from '@smastrom/react-rating';
 import { MDBBtn, MDBBtnGroup, MDBCard, MDBCardBody, MDBCardImage, MDBCardText, MDBCardTitle, MDBCol, MDBContainer, MDBIcon, MDBRow, MDBTabs, MDBTabsContent, MDBTabsItem, MDBTabsLink, MDBTabsPane } from 'mdb-react-ui-kit';
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {Link, Navigate, useSearchParams} from 'react-router-dom';
 import axios from "axios";
 import {showErrorMessage} from "../components/ErrorMessage.jsx";
+import {AuthContext} from "../components/AuthContext.jsx";
 
 
 export default function BookPreviewPage() {
@@ -11,8 +12,9 @@ export default function BookPreviewPage() {
     const [tabsActive, setTabsActive] = useState('general');
     const [book, setBook] = useState({});
     const [bookFound, setBookFound] = useState(true);
+    const { user } = useContext(AuthContext);
 
-    const userData = { name: "X", isadmin: false };
+    const isAdmin = user && user.role === '[ADMIN]';
 
     const handleTabsClick = (value) => {
         if (value === tabsActive) return;
@@ -34,6 +36,14 @@ export default function BookPreviewPage() {
         }
     };
 
+    const addToBasket = async (id) => {
+        try {
+            const response = await axios.post('http://localhost:8080/carts/' + user.email, {bookId: id, quantity: 1});
+        } catch (error) {
+            showErrorMessage('Błąd podczas pobierania danych z serwera: ' + error);
+        }
+    };
+
     if (!bookFound)
         return <Navigate to='/catalog'></Navigate>;
 
@@ -49,7 +59,10 @@ export default function BookPreviewPage() {
                     <MDBCard>
                         <MDBRow className='g-0'>
                             <MDBCol md='4'>
-                                <MDBCardImage src={book.pngPath} alt='...' fluid />
+                                <MDBCardImage src={book.pngPath} alt='...' fluid onError={({currentTarget}) => {
+                                    currentTarget.onerror = null;
+                                    currentTarget.src = 'https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png?20210219185637';
+                                }} />
                             </MDBCol>
                             <MDBCol md='8'>
                                 <MDBCardBody>
@@ -89,8 +102,8 @@ export default function BookPreviewPage() {
                                             </MDBTabsPane>
                                         </MDBTabsContent>
                                         <div className='d-flex justify-content-end'>
-                                            {userData.name && !userData.isadmin && <MDBBtnGroup className='mt-4 text-end'> {/*A dodano do koszyka?*/}
-                                            <MDBBtn color='dark'><MDBIcon fas icon="cart-plus me-2" />Dodaj do koszyka</MDBBtn>
+                                            {!isAdmin && <MDBBtnGroup className='mt-4 text-end'>
+                                            <MDBBtn color='dark' onClick={() => addToBasket(book.id)}><MDBIcon fas icon="cart-plus me-2" />Dodaj do koszyka</MDBBtn>
                                         </MDBBtnGroup>}
                                         </div>
                                     </MDBCardText>
