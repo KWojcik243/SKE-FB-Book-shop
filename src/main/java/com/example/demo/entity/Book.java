@@ -80,4 +80,16 @@ public class Book {
         }
         return null;
     }
+
+    @JsonProperty("categoryId")
+    public int getCategoryId() {
+        if (category != null) {
+            return category.getId();
+        }
+        return 0;
+    }
+
+    public void setCategory(BookCategory category) {
+        this.category = category;
+    }
 }

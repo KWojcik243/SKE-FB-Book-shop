@@ -110,7 +110,7 @@ export default function DashboardAuthors() {
                         </tr>
                     </MDBTableHead>
                     <MDBTableBody>
-                        {authorList.filter((author) => {
+                        {authorList && authorList.filter((author) => {
                             return search.trim() === '' ? author : (author.name + author.surname).toLowerCase().includes(search.trim());
                         }).map((author, i) => {
                             return (

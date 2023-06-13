@@ -8,6 +8,7 @@ import com.example.demo.repository.AuthorRepository;
 import com.example.demo.repository.BookCategoryRepository;
 import com.example.demo.repository.BookRepository;
 import jdk.jfr.Category;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -43,6 +44,10 @@ public class BookServiceImpl implements BookService {
         if (!authors.isEmpty()) {
             book.setAuthors(authors);
         }
+        BookCategory category = bookCategoryRepository.getCategoryById(bookDTO.getCategoryId());
+        if (category != null) {
+            book.setCategory(category);
+        }
         bookRepository.save(book);
     }
 
@@ -71,6 +76,7 @@ public class BookServiceImpl implements BookService {
             Book book = optionalBook.get();
 
             book.setAuthors(Collections.emptyList());
+            book.setCategory(null);
 
             bookRepository.delete(book);
             return true;
@@ -102,8 +108,10 @@ public class BookServiceImpl implements BookService {
             }
 
             // get catrgory by id
-            BookCategory category = bookCategoryRepository.getReferenceById(bookDTO.getCategoryId());
+//            BookCategory category = bookCategoryRepository.getReferenceById(bookDTO.getCategoryId());
+            BookCategory category = bookCategoryRepository.getCategoryById(bookDTO.getCategoryId());
             book.setCategory(category);
+            bookRepository.save(book);
 
             return true;
         }

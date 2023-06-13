@@ -24,6 +24,8 @@ import { MultiSelect } from "react-multi-select-component";
 
 
 export default function DashboardBooks() {
+    const emptyBook = {title: '', pngPath: '', authorIds: [], rating: 0, isbn: 0, categoryId: 0, amount: 0, ageGroup: 0};
+
     const [search, setSearch] = useState('');
 
     const [activeBook, setActiveBook] = useState({});
@@ -51,8 +53,8 @@ export default function DashboardBooks() {
             setAuthorList(response.data);
 
             let authors = [];
-            for (const author of authorList) {
-                authors.push({ label: author.name + " " + author.surname, value: author.id });
+            for (const author of response.data) {
+                authors.push({label: author.name + " " + author.surname, value: author.id});
             }
             setAuthorsSelect(authors);
         } catch (error) {
@@ -74,24 +76,54 @@ export default function DashboardBooks() {
         toggleDeleteDialog();
 
         try {
-            const response = await axios.delete(`http://localhost:8080/books/${activeBook.id}`);
+            let response = await axios.delete(`http://localhost:8080/books/${activeBook.id}`);
             setBookList(response.data);
+            await axios.delete(`http://localhost:8080/books/${activeBook.id}`);
             window.location.reload();
         } catch (error) {
             showErrorMessage('Błąd podczas usuwania książki: ' + error);
         }
     };
 
-    const addBook = () => {
+    const addBook = async () => {
+        if (!activeBook || !activeBook.title || !activeBook.categoryId || !authorsSelected || authorsSelected.length === 0) {
+            showErrorMessage('Wprowadź poprawne dane książki.');
+            return;
+        }
+
+        let newBook = {...activeBook, authorIds: authorsSelected.map((value) => value.value)};
+        console.log(newBook);
+
         toggleModifyDialog();
 
-
+        try {
+            const res = await axios.post('http://localhost:8080/books', newBook);
+            window.location.reload();
+        } catch (error) {
+            showErrorMessage('Błąd podczas dodawania książki: ' + error);
+        }
     };
 
-    const changeBook = () => {
+    const changeBook = async () => {
+        console.log(activeBook);
+
+        if (!activeBook || !activeBook.title || !activeBook.categoryId || !authorsSelected || authorsSelected.length === 0) {
+            showErrorMessage('Wprowadź poprawne dane książki.');
+            return;
+        }
+
+        let modifiedBook = {...activeBook, categoryId: parseInt(activeBook.categoryId), authorIds: authorsSelected.map((value) => value.value)};
+        console.log(modifiedBook);
+
         toggleModifyDialog();
 
-
+        try {
+            const res = await axios.put(`http://localhost:8080/books/${modifiedBook.id}`, modifiedBook);
+            console.log(res);
+            window.location.reload();
+        } catch (error) {
+            showErrorMessage('Błąd podczas modyfikacji książki: ' + error);
+        }
     };
 
     const deleteDialog = <>
@@ -180,11 +212,27 @@ export default function DashboardBooks() {
         toggleDeleteDialog();
     };
 
-    const showModifyDialog = (edit, book = {}) => {
+    const showModifyDialog = (edit, book = emptyBook) => {
         setModifyDialogEdit(edit);
 
-        setActiveBook(book);
-        setAuthorsSelected([]); // zrobić ładowanie autorów
+        if (edit) {
+            setActiveBook(book);
+            console.log(book.authors)
+
+            let authorsToSelect = [];
+
+            if (book.authors)
+            for (const author of authorsSelect) {
+                for (const a of book.authors) {
+                    if (author.value === a.id) authorsToSelect.push(author);
+                }
+            }
+
+            setAuthorsSelected(authorsToSelect);
+        } else {
+            setActiveBook({...book, categoryId: categoryList.at(0).id});
+            setAuthorsSelected([]);
+        }
 
         toggleModifyDialog();
     };
@@ -210,7 +258,7 @@ export default function DashboardBooks() {
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                    {bookList.filter((item) => {
+                    {bookList && bookList.filter((item) => {
                         const authors = item.authors ? item.authors.map((author) => author.name + " " + author.surname).join(', ') : "";
                         return search.trim() === '' ? item : (item.title + authors + item.category + item.isbn).toLowerCase().includes(search.trim());
                     }).map((book, i) => {
