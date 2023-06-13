@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@JsonIgnoreProperties("cart")
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

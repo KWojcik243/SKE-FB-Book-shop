@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,25 +22,22 @@ public class Cart {
     private int id;
 
     @OneToOne(mappedBy = "cart", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
     private User user;
 
-//    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
-//    @JoinTable(
-//            name = "cart_book",
-//            joinColumns = @JoinColumn(name = "cart_id"),
-//            inverseJoinColumns = @JoinColumn(name = "book_id")
-//    )
-//
-//    private List<Book> books;
+    @JsonProperty("userEmail")
+    public String userEmail(){
+        return user.getEmail();
+    }
 
     @ElementCollection
     @CollectionTable(
             name = "cart_items",
             joinColumns = @JoinColumn(name = "cart_id")
     )
-    @MapKeyJoinColumn(name = "book_id")
+    @MapKeyColumn(name = "book_id")
     @Column(name = "quantity")
-    private Map<Book, Integer> cartItems;
+    private Map<Integer, Integer> cartItems;
 
 
     public Cart() {
