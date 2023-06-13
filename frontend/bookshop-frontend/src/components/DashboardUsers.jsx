@@ -1,12 +1,14 @@
 import { MDBBtn, MDBIcon, MDBTable, MDBTableBody, MDBTableHead } from "mdb-react-ui-kit";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import {showErrorMessage} from "./ErrorMessage.jsx";
+import {AuthContext} from "./AuthContext.jsx";
 
 
 export default function DashboardUsers() {
     const [search, setSearch] = useState('');
     const [users, setUsers] = useState([]);
+    const { user } = useContext(AuthContext);
 
     useEffect(() => {
         fetchData();
@@ -21,12 +23,22 @@ export default function DashboardUsers() {
         }
     };
 
-    const makeAdmin = async (id) => {
-
+    const makeAdmin = async (email) => {
+        try {
+            const response = await axios.put('http://localhost:8080/auth/grant-admin/' + email);
+            window.location.reload();
+        } catch (error) {
+            showErrorMessage('Wystąpił błąd podczas wysyłania danych do serwera: ' + error);
+        }
     };
 
-    const removeAdmin = async (id) => {
-
+    const removeAdmin = async (email) => {
+        try {
+            const response = await axios.put('http://localhost:8080/auth/revoke-admin/' + email);
+            window.location.reload();
+        } catch (error) {
+            showErrorMessage('Wystąpił błąd podczas wysyłania danych do serwera: ' + error);
+        }
     };
 
     return (<>
@@ -45,13 +57,13 @@ export default function DashboardUsers() {
                 <MDBTableBody>
                     {users.filter((item) => {
                         return search.trim() === '' ? item : (item.name + item.surname).toLowerCase().includes(search.trim());
-                    }).map((u, i) => {
+                    }).sort((a, b) => a.name.localeCompare(b.name)).map((u, i) => {
                         return (<tr key={i}>
                             <td>{u.name}</td>
                             <td>{u.surname}</td>
                             <td className="text-center">
-                                {!u.isadmin && <MDBBtn outline rounded color='success' size='sm' className="m-1" onClick={() => makeAdmin(u.id)}><MDBIcon fas icon="user-check" className='me-2' />Nadaj</MDBBtn>}
-                                {u.isadmin && <MDBBtn outline rounded color='danger' size='sm' className="m-1" onClick={() => removeAdmin(u.id)}><MDBIcon fas icon="user-times" className='me-2' />Odbierz</MDBBtn>}
+                                {u.email !== user.email && u.role !== 'ADMIN' && <MDBBtn outline rounded color='success' size='sm' className="m-1" onClick={() => makeAdmin(u.email)}><MDBIcon fas icon="user-check" className='me-2' />Nadaj</MDBBtn>}
+                                {u.email !== user.email && u.role === 'ADMIN' && <MDBBtn outline rounded color='danger' size='sm' className="m-1" onClick={() => removeAdmin(u.email)}><MDBIcon fas icon="user-times" className='me-2' />Odbierz</MDBBtn>}
                             </td>
                         </tr>);
                     })}
