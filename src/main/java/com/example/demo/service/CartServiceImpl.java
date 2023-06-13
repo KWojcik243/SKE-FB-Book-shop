@@ -40,21 +40,23 @@ public class CartServiceImpl implements CartService{
 
         // check if book is in cart
         int quantityInStock = 0;
-        for (Map.Entry<Book, Integer> entry : cart.getCartItems().entrySet()) {
-            if (entry.getKey().equals(book)) {
+        for (Map.Entry<Integer, Integer> entry : cart.getCartItems().entrySet()) {
+            if (bookRepository.getReferenceById(entry.getKey()).equals(book)) {
                 quantityInStock = entry.getValue();
                 break;
             }
         }
         // check if delta is greather than n in magazine
         int quantityDelta = orderItemDTO.getQuantity() - quantityInStock;
-        if(quantityDelta < book.getAmount()){
+        if(quantityDelta > book.getAmount()){
             throw new RuntimeException("Not enough book in magazine");
         }
         else {
-            cart.getCartItems().put(book, orderItemDTO.getQuantity());
+            cart.getCartItems().put(book.getId(), orderItemDTO.getQuantity());
+            book.updateAmountBy(-quantityDelta);
+            cartRepository.save(cart);
+            bookRepository.save(book);
         }
-        // TODO cos tu logika dodawania jeszcze nie trybi
     }
 
     @Override
