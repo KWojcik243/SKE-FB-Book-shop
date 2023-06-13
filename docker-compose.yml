@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  java_db:
+    container_name: java_db
+    image: postgres:14
+    restart: always
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data/
+volumes:
+  postgres-data:
+
+#docker-compose down --volumes gdyby trzeba było usunąć bazę danych
+#docker-compose up --build

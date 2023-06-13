@@ -1,0 +1,9 @@
+* {
+    --accent: #19a56f;
+    --rmsc-main: var(--accent) !important;
+    accent-color: var(--accent) !important;
+}
+
+.App {
+    min-height: 100vh !important;
+}

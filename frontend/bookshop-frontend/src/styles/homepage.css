@@ -1,0 +1,181 @@
+#mainpanel {
+    margin: 0px;
+    text-align: center;
+    padding-top: 10vh;
+    color: #fff;
+    font-family: 'Roboto';
+    font-size: 36px;
+    font-weight: 100;
+    overflow: hidden;
+    animation: bg 10s linear infinite;
+    height: 100%;
+}
+
+.dropping-texts {
+    display: inline-block;
+    width: 200px;
+    text-align: left;
+    height: 1em;
+    vertical-align: -2px;
+    --mtex: -8px;
+}
+
+.dropping-texts>div {
+    font-size: 0px;
+    opacity: 0;
+    margin-left: -30px;
+    position: absolute;
+    font-weight: 600;
+}
+
+.dropping-texts>div:nth-child(1) {
+    animation: roll 10s linear infinite 0s;
+}
+
+.dropping-texts>div:nth-child(2) {
+    animation: roll 10s linear infinite 2s;
+}
+
+.dropping-texts>div:nth-child(3) {
+    animation: roll 10s linear infinite 4s;
+}
+
+.dropping-texts>div:nth-child(4) {
+    animation: roll2 10s linear infinite 6s;
+}
+
+@keyframes roll {
+    0% {
+        font-size: 0px;
+        opacity: 0;
+        margin-left: -30px;
+        margin-top: var(--mtex);
+        transform: rotate(-25deg);
+    }
+
+    3% {
+        opacity: 1;
+        transform: rotate(0deg);
+    }
+
+    5% {
+        font-size: inherit;
+        opacity: 1;
+        margin-left: 0px;
+        margin-top: var(--mtex);
+    }
+
+    20% {
+        font-size: inherit;
+        opacity: 1;
+        margin-left: 0px;
+        margin-top: var(--mtex);
+        transform: rotate(0deg);
+    }
+
+    27% {
+        font-size: 0px;
+        opacity: 0.5;
+        margin-left: 50px;
+        margin-top: 10px;
+    }
+
+    100% {
+        font-size: 0px;
+        opacity: 0;
+        margin-left: 10px;
+        margin-top: var(--mtex);
+        transform: rotate(15deg);
+    }
+}
+
+@keyframes roll2 {
+    0% {
+        font-size: 0px;
+        opacity: 0;
+        margin-left: -30px;
+        margin-top: var(--mtex);
+        transform: rotate(-25deg);
+    }
+
+    3% {
+        opacity: 1;
+        transform: rotate(0deg);
+    }
+
+    5% {
+        font-size: inherit;
+        opacity: 1;
+        margin-left: 0px;
+        margin-top: var(--mtex);
+    }
+
+    30% {
+        font-size: inherit;
+        opacity: 1;
+        margin-left: 0px;
+        margin-top: var(--mtex);
+        transform: rotate(0deg);
+    }
+
+    37% {
+        font-size: 50px;
+        opacity: 0;
+        margin-left: 100px;
+        margin-top: var(--mtex);
+    }
+
+    100% {
+        font-size: 0px;
+        opacity: 0;
+        margin-left: -30px;
+        margin-top: var(--mtex);
+        transform: rotate(15deg);
+    }
+}
+
+@keyframes bg {
+    0% {
+        background: #19a56f;
+    }
+
+    3% {
+        background: #118b5c;
+    }
+
+    20% {
+        background: #118b5c;
+    }
+
+    23% {
+        background: #0b7e52;
+    }
+
+    40% {
+        background: #0b7e52;
+    }
+
+    43% {
+        background: #096542;
+    }
+
+    60% {
+        background: #096542;
+    }
+
+    63% {
+        background: #068a58;
+    }
+
+    80% {
+        background: #068a58;
+    }
+
+    83% {
+        background: #05be77;
+    }
+
+    100% {
+        background: #05be77;
+    }
+}
