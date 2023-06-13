@@ -85,7 +85,7 @@ export default function DashboardOrders() {
                 </MDBTableHead>
                 <MDBTableBody>
                     {orders.filter((item) => {
-                        const user = item.user ? item.user.name + " " + item.user.surname : "";
+                        const user = item.userMail ? item.userMail : "";
                         return search.trim() === '' ? item : (item.id + user + item.status).toLowerCase().includes(search.trim());
                     }).map((order, i) => {
                         return (<tr key={i}>
